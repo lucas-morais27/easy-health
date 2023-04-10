@@ -1,10 +1,9 @@
-from flask import render_template
 from flask_restful import Resource
+from services.index_service import IndexService
+
+index_service = IndexService()
 
 class IndexController(Resource):
-
+    
     def get(self):
-        return render_template("index.html")
-
-    def post(self):
-        return render_template("index.html")
+        return index_service.render_index()

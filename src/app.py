@@ -5,7 +5,7 @@ from models import db
 from schemas import ma
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///easy_health.db"
 db.init_app(app)
 ma.init_app(app)
@@ -24,9 +24,7 @@ from models.client_address_model import ClientAddressModel
 
 Migrate(app, db)
 
-
 # API Resources
-
 from controllers.index_controller import IndexController
 api.add_resource(IndexController, '/')
 from controllers.client_controller import ClientController
@@ -35,6 +33,8 @@ from controllers.professional_controller import ProfessionalController
 api.add_resource(ProfessionalController, '/professional', '/professional/<int:id>')
 from controllers.login_controller import LoginController
 api.add_resource(LoginController, '/log-in')
+from controllers.home_controller import HomeController
+api.add_resource(HomeController, '/home', endpoint='home')
 
 
 if __name__ == '__main__':
