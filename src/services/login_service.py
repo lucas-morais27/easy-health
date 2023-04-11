@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request
 from models.client_model import ClientModel
 from models.professional_model import ProfessionalModel
 from app import app

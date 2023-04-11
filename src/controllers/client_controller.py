@@ -13,7 +13,6 @@ class ClientController(Resource):
     def post(self):
         client = client_service.create_client(request.json)
         return client, 201
-        
 
     def put(self):
         pass

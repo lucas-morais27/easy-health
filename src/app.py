@@ -11,6 +11,7 @@ db.init_app(app)
 ma.init_app(app)
 api = Api(app)
 
+BASE_URL = 'http://127.0.0.1:5000'
 
 # Imports so Migrate can recognize tables
 from models.address_model import AddressModel
@@ -26,7 +27,7 @@ Migrate(app, db)
 
 # API Resources
 from controllers.index_controller import IndexController
-api.add_resource(IndexController, '/')
+api.add_resource(IndexController, '/', '/index')
 from controllers.client_controller import ClientController
 api.add_resource(ClientController, '/clients', '/clients/<int:id>')
 from controllers.professional_controller import ProfessionalController
@@ -35,6 +36,8 @@ from controllers.login_controller import LoginController
 api.add_resource(LoginController, '/log-in')
 from controllers.home_controller import HomeController
 api.add_resource(HomeController, '/home', endpoint='home')
+from controllers.signup_controller import SignupController
+api.add_resource(SignupController, '/sign-up')
 
 
 if __name__ == '__main__':
