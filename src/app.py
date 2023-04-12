@@ -38,7 +38,12 @@ from controllers.home_controller import HomeController
 api.add_resource(HomeController, '/home', endpoint='home')
 from controllers.signup_controller import SignupController
 api.add_resource(SignupController, '/sign-up')
-
+from controllers.professional_search_controller import ProfessionalSearchController
+api.add_resource(ProfessionalSearchController, '/professional-search')
+from controllers.client_profile_controller import ClientProfileController
+api.add_resource(ClientProfileController, '/client-profile')
+from controllers.client_home_controller import ClientHomeController
+api.add_resource(ClientHomeController, '/client-home')
 
 if __name__ == '__main__':
     app.run(debug=True)

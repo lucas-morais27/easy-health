@@ -1,0 +1,23 @@
+{% extends 'base-client.html' %}
+
+{% block content %}
+    
+<div class="container">
+    {% if client%}
+        <p>{{client.name}} name</p>
+        <p>{{client.email}}email</p>
+        <p>{{client.health_plan}}health_plan</p>
+        <p>{{client.address.city}} - {{client.address.state}}</p>
+        <p>{{client.address.street}}, {{client.address.complement}}</p>
+    {% else %}
+        <h1>não foi possivel carregar perfil</h1>
+        <p>name</p>
+        <p>email</p>
+        <p>health_plan</p>
+        <p>city - state</p>
+        <p>street - complement</p>
+        {% endif %}
+    </div>
+</div>
+ 
+{% endblock %}
