@@ -43,7 +43,7 @@ api.add_resource(ProfessionalSearchController, '/professional-search')
 from controllers.client_profile_controller import ClientProfileController
 api.add_resource(ClientProfileController, '/client-profile')
 from controllers.client_home_controller import ClientHomeController
-api.add_resource(ClientHomeController, '/client-home')
+api.add_resource(ClientHomeController, '/client-home', endpoint='client-home')
 
 if __name__ == '__main__':
     app.run(debug=True)

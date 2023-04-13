@@ -1,9 +1,13 @@
-from flask import render_template, request
-from app import app
+from flask import render_template, request, redirect, url_for
+from app import app, db
+from flask import jsonify
+from models.client_model import ClientModel
+from models.client_address_model import AddressModel
 
 class SignupService:
 
-    def authentication(self):
+    @app.route('/sign-up/client', methods=['GET', 'POST'])
+    def register(self):
 
         name = request.form['name']
         email = request.form['email']
@@ -15,24 +19,24 @@ class SignupService:
         complement = request.form['complement']
         health_plan = request.form['health_plan']
 
-        print(name)
-        print(city)
+        address = AddressModel(state=state, city=city, street=street, complement=complement)
 
-        if request.method == "POST":
+        db.session.add(address)
+        db.session.commit()
 
-            body = {
-                'name': name,
-                'email': email,
-                'password': password,
-                'phone_number': phone_number,
-                'address': {
-                    'state': state,
-                    'city': city,
-                    'street': street,
-                    'complement': complement
-                },
-                'health_plan': health_plan
-            }
+        client = ClientModel(name=name, email=email, password=password, phone_number=phone_number, health_plan=health_plan, address=address)
+
+        test = ClientModel(name='Joana', email='AA@AA', password='bbbb', phone_number=232323, state='asdasd', city='asdas', street='apdi', complement='casa', health_plan='farmacia')
+
+        db.session.add(client)
+        db.session.commit()
+
+        teste = client.query.get(client)
+        if teste is not None:
+            return True
+        else:
+            return False
+
         
 
     @app.route('/sign-up')

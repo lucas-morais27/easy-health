@@ -2,7 +2,7 @@
 
 {% block content %}
     
-<div class="container">
+<div class="container" style="color: black;">
     {% if client%}
         <p>{{client.name}} name</p>
         <p>{{client.email}}email</p>
@@ -10,7 +10,7 @@
         <p>{{client.address.city}} - {{client.address.state}}</p>
         <p>{{client.address.street}}, {{client.address.complement}}</p>
     {% else %}
-        <h1>não foi possivel carregar perfil</h1>
+        <h1 style="color: black;">não foi possivel carregar perfil</h1>
         <p>name</p>
         <p>email</p>
         <p>health_plan</p>
