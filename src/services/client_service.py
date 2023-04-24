@@ -1,23 +1,44 @@
-from schemas.client_serializer import ClientSerializer
-from models.client_model import ClientModel
-from models import db
+from flask import Blueprint, render_template, request
+from models.clientModel import ClientModel
+from models.clientDAO import ClientDAO
 
-
-client_serializer = ClientSerializer()
-clients_serializer = ClientSerializer(many=True)
+client_bp = Blueprint('client', __name__)
 
 class ClientService:
 
-    def create_client(self, obj):
-        client = client_serializer.load(obj)
-        db.session.add(client)
-        db.session.commit()
-        return client_serializer.dump(client)
+    @client_bp.route('/sign-up', methods=['GET', 'POST'])
+    def create_client():
 
-    def get_client(self, id):
-        query = ClientModel.query.get(id)
-        return client_serializer.dump(query)
+        msg = ''
+        if request.method == 'POST':
+            name = request.form["name"]
+            email = request.form['email']
+            password = request.form['password']
+            phone_number = request.form['phone_number']
 
-    def get_all_clients(self):
-        query = ClientModel.query.all()
-        return clients_serializer.dump(query)
+            print(name)
+            print(email)
+            print(password)
+            print(phone_number)
+
+            state = request.form['state']
+            city = request.form['city']
+            street = request.form['street']
+            complement = request.form['complement']
+
+            client = ClientModel(name, email, password, phone_number)
+            print(client.name)
+            print(client.email)
+            print(client.password)
+            print(client.phone_number)
+            dao = ClientDAO()
+
+            codigo = dao.create(client)
+
+            if codigo > 0:
+                msg = ("Cadastrado com sucesso!")
+            else:
+                msg = ("Erro ao cadastrar!")
+
+        vartitulo = "Cadastro"
+        return render_template("sign-up.html", titulo=vartitulo, msg=msg)

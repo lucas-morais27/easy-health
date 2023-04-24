@@ -1,18 +1,17 @@
-from flask_restful import Resource, request
+from flask_restful import Resource
 from services.client_service import ClientService
 
 client_service = ClientService()
 
 class ClientController(Resource):
 
-    def get(self, id=None):
-        if id:
-            return client_service.get_client(id)
-        return client_service.get_all_clients()
+    def get(self):
+        
+        return 
 
     def post(self):
-        client = client_service.create_client(request.json)
-        return client, 201
+        
+        return 
 
     def put(self):
         pass

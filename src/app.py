@@ -1,49 +1,21 @@
-from flask import Flask
-from flask_migrate import Migrate
-from flask_restful import Api
+from flask import Blueprint, Flask, g, redirect, render_template, request, session, url_for
 from models import db
-from schemas import ma
-
 
 app = Flask(__name__, template_folder='templates')
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///easy_health.db"
-db.init_app(app)
-ma.init_app(app)
-api = Api(app)
 
-BASE_URL = 'http://127.0.0.1:5000'
+from services.client_service import client_bp
+app.register_blueprint(client_bp)
 
-# Imports so Migrate can recognize tables
-from models.address_model import AddressModel
-from models.client_model import ClientModel
-from models.professional_model import ProfessionalModel
-from models.subspecialties_model import subspecilaty_professional, SubspecialtyModel
-from models.health_plan_model import health_plan_professional, HealthPlanModel
-from models.professional_address_model import ProfessionalAddressModel
-from models.client_address_model import ClientAddressModel
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template('index.html')
 
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
-Migrate(app, db)
-
-# API Resources
-from controllers.index_controller import IndexController
-api.add_resource(IndexController, '/', '/index')
-from controllers.client_controller import ClientController
-api.add_resource(ClientController, '/clients', '/clients/<int:id>')
-from controllers.professional_controller import ProfessionalController
-api.add_resource(ProfessionalController, '/professional', '/professional/<int:id>')
-from controllers.login_controller import LoginController
-api.add_resource(LoginController, '/log-in')
-from controllers.home_controller import HomeController
-api.add_resource(HomeController, '/home', endpoint='home')
-from controllers.signup_controller import SignupController
-api.add_resource(SignupController, '/sign-up')
-from controllers.professional_search_controller import ProfessionalSearchController
-api.add_resource(ProfessionalSearchController, '/professional-search')
-from controllers.client_profile_controller import ClientProfileController
-api.add_resource(ClientProfileController, '/client-profile')
-from controllers.client_home_controller import ClientHomeController
-api.add_resource(ClientHomeController, '/client-home', endpoint='client-home')
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__=='__main__':
+    app.run(host="0.0.0.0", port=8080, debug=True)

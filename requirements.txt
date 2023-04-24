@@ -1,8 +1,3 @@
 flask
-flask-restful
-flask-sqlalchemy
 flask-login
-flask-marshmallow
-flask-migrate
-marshmallow-sqlalchemy
 requests
