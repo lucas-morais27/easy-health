@@ -14,3 +14,13 @@ class ClientController():
             return 1
         except:
             return 0
+        
+    def authenticate(self, email, password):
+        try:
+            sql = "SELECT * FROM client WHERE email=%s AND password=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (email, password))
+            usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
+            return usuario 
+        except:
+            return None

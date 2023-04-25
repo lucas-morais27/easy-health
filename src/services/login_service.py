@@ -1,27 +1,25 @@
-from flask import render_template, request
-from models.client_model import ClientModel
-from models.professional_model import ProfessionalModel
-from app import app
+from flask import Blueprint, redirect, render_template, request
+from controller.client_controller import ClientController
+
+login_bp = Blueprint('login', __name__)
 
 class LoginService:
 
-    def authentication(self):
-        email = request.form['email']
-        password = request.form['password']
+    @login_bp.route('/log-in', methods=['GET', 'POST'])
+    def login():
+        msg = '#'
+        if request.method == "POST":
+            email = request.form['email']
+            password = request.form['password']
+            
+            client_controller = ClientController().authenticate(email=email, password=password)
 
-        client = ClientModel.query.filter_by(email=email).first()
-        profissional = ProfessionalModel.query.filter_by(email=email).first()
+            if client_controller is not None:
+                if password == client_controller[5]:
+                    return redirect('home')
+            else:
+                msg = "Erro ao fazer login. Email ou senha inválida/errada."
 
-        if client:
-            if password == client.password:
-                return True
-        elif profissional:
-            if password == profissional.password:
-                return True
-        else:
-            return False
-        
-    @app.route('/log-in')
-    def render_login():
-        return render_template('log-in.html')
+
+        return render_template('log-in.html', msg=msg)
     
