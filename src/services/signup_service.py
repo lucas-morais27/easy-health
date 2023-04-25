@@ -80,7 +80,9 @@ class SignupService:
             else:
                 home_service = 0
 
-            professional_model = ProfessionalModel(provides_home_service=home_service, specialty=specialty, council_registration=registration, twitter=twitter, insta=insta, linkedin=linkedin, bio=bio, name=name, email=email, password=password, phone_number=int(phone_number))
+            print(home_service)
+
+            professional_model = ProfessionalModel(provides_home_service=home_service, specialty=specialty, council_registration=int(registration), twitter=twitter, insta=insta, linkedin=linkedin, bio=bio, name=name, email=email, password=password, phone_number=int(phone_number))
             
             professional_controller = ProfessionalController().create(professional_model)
 

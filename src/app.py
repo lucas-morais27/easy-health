@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask
 
 app = Flask(__name__, template_folder='templates')
 
@@ -10,12 +10,8 @@ from services.home_service import home_bp
 app.register_blueprint(home_bp)
 from services.signup_service import signup_bp
 app.register_blueprint(signup_bp)
-
-
-@app.route('/')
-@app.route('/index')
-def index():
-    return render_template('index.html')
+from services.index_service import index_bp
+app.register_blueprint(index_bp)
 
 if __name__=='__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
