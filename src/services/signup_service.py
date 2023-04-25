@@ -4,29 +4,16 @@ from models.client_model import ClientModel
 from models.healthplan_model import HealthPlanModel
 from models.professional_model import ProfessionalModel
 
-from controller.client_controller import ClientController
-from controller.healthplan_controller import HealthPlanController
-from controller.professional_controller import ProfessionalController
+from services.client_service import ClientService
+from services.healthplan_service import HealthPlanService
+from services.professional_service import ProfessionalService
 
-signup_bp = Blueprint('signup', __name__)
+
 
 class SignupService:
-
-    @signup_bp.route('/sign-up', methods=['GET', 'POST'])
-    def signup():
-        if request.method == "POST":
-            user = request.form['user']
-
-            if user == 'client':
-                return redirect('sign-up/client')
-            elif user == 'professional':
-                return redirect('sign-up/professional')
-
-        return render_template('sign-up.html')
     
-    @signup_bp.route('/sign-up/client', methods=['GET', 'POST'])
-    def create_client():
-        msg = ''
+    def create_client(self, request):
+        msg = 'OLa'
         if request.method == 'POST':
             name = request.form['name']
             email = request.form['email']
@@ -40,23 +27,23 @@ class SignupService:
 
             health_plan_model = HealthPlanModel(name=health_plan)
 
-            health_plan_controller = HealthPlanController().create(health_plan_model)
+            health_plan_controller = HealthPlanService().create(health_plan_model)
 
             if health_plan_controller > 0:
 
                 client_model = ClientModel(health_plan=health_plan_model.name, name=name, email=email, password=password, phone_number=int(phone_number))
                 
-                client_controller = ClientController().create(client_model)
+                client_controller = ClientService().create(client_model)
 
                 if client_controller > 0:
                     msg = ("Cadastrado com sucesso!")
                 else:
                     msg = ("Erro ao cadastrar!")
-
-        return render_template("sign-up-client.html", msg=msg)
+        return msg
+        
     
-    @signup_bp.route('/sign-up/professional', methods=['GET', 'POST'])
-    def create_professional():
+    
+    def create_professional(self, request):
         msg = ''
         if request.method == 'POST':
             name = request.form['name']
@@ -84,11 +71,11 @@ class SignupService:
 
             professional_model = ProfessionalModel(provides_home_service=home_service, specialty=specialty, council_registration=int(registration), twitter=twitter, insta=insta, linkedin=linkedin, bio=bio, name=name, email=email, password=password, phone_number=int(phone_number))
             
-            professional_controller = ProfessionalController().create(professional_model)
+            professional_controller = ProfessionalService().create(professional_model)
 
             if professional_controller > 0:
                 msg = ("Cadastrado com sucesso!")
             else:
                 msg = ("Erro ao cadastrar!")
-
-        return render_template("sign-up-professional.html", msg=msg)
+        return msg
+        

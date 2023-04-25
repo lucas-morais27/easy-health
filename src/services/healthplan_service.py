@@ -1,6 +1,6 @@
 from models import db
 
-class HealthPlanController():
+class HealthPlanService():
 
     def __init__(self):
         self.con = db

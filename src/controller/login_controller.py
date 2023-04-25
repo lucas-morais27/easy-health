@@ -1,10 +1,11 @@
 from flask import Blueprint, redirect, render_template, request, session, url_for
-from controller.client_controller import ClientController
-from controller.professional_controller import ProfessionalController
+
+from services.client_service import ClientService
+from services.professional_service import ProfessionalService
 
 login_bp = Blueprint('login', __name__)
 
-class LoginService:
+class LoginController:
 
     login_bp.auth = {
         # acao: { perfil:permissao }
@@ -38,8 +39,8 @@ class LoginService:
             email = request.form['email']
             password = request.form['password']
             
-            client_controller = ClientController().authenticate(email=email, password=password)
-            professional_controller = ProfessionalController().authenticate(email=email, password=password)
+            client_controller = ClientService().authenticate(email=email, password=password)
+            professional_controller = ProfessionalService().authenticate(email=email, password=password)
 
             if client_controller is not None and client_controller[2] == 1:
                 if password == client_controller[5]:

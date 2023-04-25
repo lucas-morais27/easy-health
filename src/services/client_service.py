@@ -1,43 +1,46 @@
-from flask import Blueprint, render_template, request
-from models.client_model import ClientModel
-from models.healthplan_model import HealthPlanModel
-from controller.client_controller import ClientController
-from controller.healthplan_controller import HealthPlanController
+from models import db
 
 
-client_bp = Blueprint('client', __name__)
-
-#class ClientService:
+class ClientService():
+    def __init__(self):
+        self.con = db
     
-    # @client_bp.route('/sign-up', methods=['GET', 'POST'])
-    # def create_client():
-    #     msg = ''
-    #     if request.method == 'POST':
-    #         name = request.form['name']
-    #         email = request.form['email']
-    #         password = request.form['password']
-    #         phone_number = request.form['phone_number']
-
-    #         state = request.form['state']
-    #         city = request.form['city']
-    #         street = request.form['street']
-    #         complement = request.form['complement']
-
-    #         health_plan = request.form['health_plan']
-
-    #         health_plan_model = HealthPlanModel(name=health_plan)
-
-    #         health_plan_controller = HealthPlanController().create(health_plan_model)
-
-    #         if health_plan_controller > 0:
-
-    #             client_model = ClientModel(health_plan=health_plan_model.name, name=name, email=email, password=password, phone_number=int(phone_number))
-                
-    #             client_controller = ClientController().create(client_model)
-
-    #             if client_controller > 0:
-    #                 msg = ("Cadastrado com sucesso!")
-    #             else:
-    #                 msg = ("Erro ao cadastrar!")
-
-    #     return render_template("sign-up.html", msg=msg)
+    def create(self, client):
+        try:
+            sql = "INSERT INTO client(health_plan, active, name, email, password, phone_number) VALUES (%s, %s, %s, %s, %s, %s)"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (client.health_plan, 1, client.name, client.email, client.password, client.phone_number,))
+            self.con.commit()
+            return 1
+        except:
+            return 0
+        
+    def authenticate(self, email, password):
+        try:
+            sql = "SELECT * FROM client WHERE email=%s AND password=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (email, password))
+            usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
+            return usuario 
+        except:
+            return None
+        
+    def find(self, id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM client WHERE id=%s"
+            cursor.execute(sql, (id,))
+            funcionario = cursor.fetchone()
+            return funcionario
+        except:
+            return 0
+        
+    def disable(self, id):
+        try:
+            sql = "UPDATE client SET active=0 WHERE id=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (id,))
+            self.con.commit()
+            return cursor.rowcount
+        except:
+            return 0

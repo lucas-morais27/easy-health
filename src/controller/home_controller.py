@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session
 
 home_bp = Blueprint('home', __name__)
 
-class HomeService:
+class HomeController:
         
     @home_bp.route('/home')
     def home():

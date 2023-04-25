@@ -1,18 +1,18 @@
 from flask import Blueprint, redirect, render_template, request
-from controller.client_controller import ClientController
+from services.client_service import ClientService
 
 client_profile_bp = Blueprint('client_profile', __name__)
 
-class ClientProfileService:
+class ClientProfileController:
         
     @client_profile_bp.route('/client-profile-<id>', methods=['GET', 'POST'])
     def client_profile(id):
-        client = ClientController().find(id)
+        client = ClientService().find(id)
 
         if request.method == "POST":
             disable = request.form['disable']
             if disable:
-                client_disable = ClientController().disable(id)
+                client_disable = ClientService().disable(id)
                 if client_disable:
                     return redirect('index')
                 
