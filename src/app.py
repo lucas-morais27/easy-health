@@ -1,9 +1,9 @@
-from flask import Flask, redirect, request, session, url_for
+from flask import Flask
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = "123"
 
-from services.client_service import client_bp
+from controller.client_controller import client_bp
 app.register_blueprint(client_bp)
 from services.login_service import login_bp
 app.register_blueprint(login_bp)

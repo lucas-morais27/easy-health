@@ -4,9 +4,6 @@ from models.healthplan_model import HealthPlanModel
 from controller.client_controller import ClientController
 from controller.healthplan_controller import HealthPlanController
 
-
-client_bp = Blueprint('client', __name__)
-
 #class ClientService:
     
     # @client_bp.route('/sign-up', methods=['GET', 'POST'])

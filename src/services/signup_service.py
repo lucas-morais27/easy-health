@@ -24,37 +24,6 @@ class SignupService:
 
         return render_template('sign-up.html')
     
-    @signup_bp.route('/sign-up/client', methods=['GET', 'POST'])
-    def create_client():
-        msg = ''
-        if request.method == 'POST':
-            name = request.form['name']
-            email = request.form['email']
-            password = request.form['password']
-            phone_number = request.form['phone_number']
-            state = request.form['state']
-            city = request.form['city']
-            street = request.form['street']
-            complement = request.form['complement']
-            health_plan = request.form['health_plan']
-
-            health_plan_model = HealthPlanModel(name=health_plan)
-
-            health_plan_controller = HealthPlanController().create(health_plan_model)
-
-            if health_plan_controller > 0:
-
-                client_model = ClientModel(health_plan=health_plan_model.name, name=name, email=email, password=password, phone_number=int(phone_number))
-                
-                client_controller = ClientController().create(client_model)
-
-                if client_controller > 0:
-                    msg = ("Cadastrado com sucesso!")
-                else:
-                    msg = ("Erro ao cadastrar!")
-
-        return render_template("sign-up-client.html", msg=msg)
-    
     @signup_bp.route('/sign-up/professional', methods=['GET', 'POST'])
     def create_professional():
         msg = ''

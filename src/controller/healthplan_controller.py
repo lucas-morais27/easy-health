@@ -2,15 +2,12 @@ from models import db
 
 class HealthPlanController():
 
-    def __init__(self):
-        self.con = db
-
     def create(self, plan):
         try:
-            sql = "INSERT INTO health_plan (name) VALUES (%s)"
-            cursor = self.con.cursor()
-            cursor.execute(sql, (plan.name,))
-            self.con.commit()
-            return 1
+            sql = "INSERT INTO health_plan(name) VALUES (%s)"
+            cursor = db.cursor()
+            cursor.execute(sql, (plan))
+            db.commit()
+            return True
         except:
-            return 0
+            return False
