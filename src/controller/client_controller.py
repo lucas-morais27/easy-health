@@ -24,3 +24,23 @@ class ClientController():
             return usuario 
         except:
             return None
+        
+    def find(self, id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM client WHERE id=%s"
+            cursor.execute(sql, (id,))
+            funcionario = cursor.fetchone()
+            return funcionario
+        except:
+            return 0
+        
+    def disable(self, id):
+        try:
+            sql = "UPDATE client SET active=0 WHERE id=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (id,))
+            self.con.commit()
+            return cursor.rowcount
+        except:
+            return 0

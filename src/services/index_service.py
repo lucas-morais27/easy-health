@@ -6,6 +6,6 @@ class IndexService:
 
     @index_bp.route('/')
     @index_bp.route('/index')
-    def render_index():
+    def index():
         return render_template('index.html')
     
