@@ -6,7 +6,7 @@ SET time_zone = `+00:00`;
 
 CREATE TABLE IF NOT EXISTS `client` (
 	`health_plan`	VARCHAR(30) NOT NULL,
-	`id`	INTEGER NOT NULL,
+	`id`	INT(10) NOT NULL AUTO_INCREMENT,
 	`active`	BOOLEAN NOT NULL,
 	`name`	VARCHAR(50) NOT NULL,
 	`email`	VARCHAR(30) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `professional` (
 	`insta`	VARCHAR(20),
 	`linkedin`	VARCHAR(20),
 	`bio`	VARCHAR(50),
-	`id`	INTEGER NOT NULL,
+	`id`	INT(10) NOT NULL AUTO_INCREMENT,
 	`active`	BOOLEAN NOT NULL,
 	`name`	VARCHAR(50) NOT NULL,
 	`email`	VARCHAR(30) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `subspecialty` (
 );
 CREATE TABLE IF NOT EXISTS `client_address` (
 	`client_id`	INTEGER NOT NULL,
-	`id`	INTEGER NOT NULL,
+	`id`	INT(10) NOT NULL AUTO_INCREMENT,
 	`state`	VARCHAR(2) NOT NULL,
 	`city`	VARCHAR(20) NOT NULL,
 	`street`	VARCHAR(100) NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `health_plan_professional` (
 );
 CREATE TABLE IF NOT EXISTS `professional_address` (
 	`professional_id`	INTEGER NOT NULL,
-	`id`	INTEGER NOT NULL,
+	`id`	INT(10) NOT NULL AUTO_INCREMENT,
 	`state`	VARCHAR(2) NOT NULL,
 	`city`	VARCHAR(20) NOT NULL,
 	`street`	VARCHAR(100) NOT NULL,

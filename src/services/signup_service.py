@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from app import app, db
 from flask import jsonify
-from models.clientModel import ClientModel
+from models.client_model import ClientModel
 from models.client_address_model import AddressModel
 
 class SignupService:
