@@ -7,7 +7,6 @@ class SignUpController:
 
     @signup_bp.route('/sign-up', methods=['GET', 'POST'])
     def singup():
-        
         if request.method == "POST":
             user = request.form['user']
             if user == 'client':

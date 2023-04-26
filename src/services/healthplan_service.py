@@ -7,7 +7,7 @@ class HealthPlanService():
 
     def create(self, plan):
         try:
-            sql = "INSERT INTO health_plan (name) VALUES (%s)"
+            sql = "INSERT INTO health_plan(name) VALUES (%s)"
             cursor = self.con.cursor()
             cursor.execute(sql, (plan.name,))
             self.con.commit()

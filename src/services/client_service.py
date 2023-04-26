@@ -1,7 +1,7 @@
 from models import db
 
-
 class ClientService():
+
     def __init__(self):
         self.con = db
     
