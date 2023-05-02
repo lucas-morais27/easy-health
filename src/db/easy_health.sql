@@ -71,3 +71,16 @@ CREATE TABLE IF NOT EXISTS `subspecilaty_professional` (
 	FOREIGN KEY(`subspecialty_id`) REFERENCES `subspecialty`(`name`),
 	FOREIGN KEY(`professional_id`) REFERENCES `professional`(`id`)
 );
+
+CREATE TABLE IF NOT EXISTS `appointment`(
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`client_id`	INTEGER,
+	`professional_id`	INTEGER NOT NULL,
+	`dateTime` DATETIME,
+	`status` ENUM('aberto','agendado','concluido'),
+	`description` VARCHAR(100),
+	FOREIGN KEY(`client_id`) REFERENCES `client`(`id`),
+	FOREIGN KEY(`professional_id`) REFERENCES `professional`(`id`),
+	PRIMARY KEY(`id`)
+)
+
