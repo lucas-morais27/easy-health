@@ -1,12 +1,13 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, session
 from controller.professional_controller import ProfessionalController
 
 professional_profile_bp = Blueprint('professional_profile', __name__)
 
 class ClientProfileController:
         
-    @professional_profile_bp.route('/professional-profile-<id>', methods=['GET', 'POST'])
-    def professional_profile(id):
+    @professional_profile_bp.route('/professional-profile', methods=['GET', 'POST'])
+    def professional_profile():
+        id = session['logado']['id']
         professional = ProfessionalController().find(id)
 
         if request.method == "POST":

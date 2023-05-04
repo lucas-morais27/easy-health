@@ -9,12 +9,14 @@ class HomeController:
     def home():
         nome = session['logado']['nome']
         id = session['logado']['id']
-        return render_template('home-client.html', nome=nome, id=id)
+        tipo = session['logado']['tipo']
+        return render_template('home-client.html', nome=nome, id=id, tipo=tipo)
     
     @home_professional_bp.route('/home-professional')
     def home():
         nome = session['logado']['nome']
         id = session['logado']['id']
-        return render_template('home-professional.html', nome=nome, id=id)
+        tipo = session['logado']['tipo']
+        return render_template('home-professional.html', nome=nome, id=id, tipo=tipo)
     
     

@@ -44,3 +44,19 @@ class ProfessionalController():
             return funcionario
         except:
             return 0
+        
+    def list(self, id=None):
+        try:
+            cursor = self.con.cursor()
+            if id != None:
+                sql = "SELECT * FROM professional WHERE id=%s"
+                cursor.execute(sql, (id,))
+                professional = cursor.fetchone()
+                return professional
+            else:
+                sql = "SELECT * FROM professional"
+                cursor.execute(sql)
+                professionals = cursor.fetchall()
+                return professionals
+        except:
+            return None

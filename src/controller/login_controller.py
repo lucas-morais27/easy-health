@@ -9,17 +9,19 @@ class LoginController:
 
 	login_bp.auth = {
 		# acao: { perfil:permissao }
-		'index': {0:1, 1:1},
-		'home': {0:1, 1:1},
-		'login': {0:1, 1:1},
-		'signup': {0:1, 1:1},
-		'client_profile': {0:1, 1:1},
+		'log-out': {0:1, 1:1},
+		'client-profile': {0:1, 1:1},
+		'professional-profile': {0:1, 1:1},
+		'home-client': {0:1, 1:1},
+		'home-professional': {0:1, 1:1},
+		'list-professional': {0:1, 1:1},
 	}
 
 	@login_bp.before_request
 	def authorization():
 		acao = request.path[1:]
 		acao = acao.split('/')
+
 		if len(acao)>=1:
 			acao = acao[0]
 
@@ -47,7 +49,8 @@ class LoginController:
 					
 					session['logado'] = {
 						'id': client_controller[1],
-						'nome': client_controller[3]
+						'nome': client_controller[3],
+						'tipo': 'client'
 					}
 					
 					return redirect('home-client')
@@ -56,7 +59,8 @@ class LoginController:
 
 					session['logado'] = {
 						'id': professional_controller[7],
-						'nome': professional_controller[9]
+						'nome': professional_controller[9],
+						'tipo': 'professional'
 					}
 
 					return redirect('home-professional')
