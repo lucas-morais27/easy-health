@@ -1,4 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
 
+import MySQLdb
 
-db = SQLAlchemy()
+db = MySQLdb.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="easy_health"
+)

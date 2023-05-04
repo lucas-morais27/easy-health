@@ -18,7 +18,7 @@
 	<meta property="og:type" content="article" />
 
     <!-- Website Title -->
-    <title>Cadastrar - Easy Health</title>
+    <title>Professionals - Easy Health</title>
     
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
@@ -52,7 +52,7 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index">Tivo</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="index"><img src="../static/images/logo.png" alt="alternative"></a> 
+            <a class="navbar-brand logo-image" href="home-client"><img src="../static/images/logo.png" alt="alternative"></a> 
             
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,12 +64,12 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link page-scroll" href="index">HOME <span class="sr-only">(current)</span></a>
+                        <a class="nav-link page-scroll" href="client-profile">Seu Perfil<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link page-scroll" href="log-out"></i>Sair <i class="fas fa-angle-double-right"></i><span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
-                <span class="nav-item">
-                    <a class="btn-outline-sm" href="log-in">ENTRAR</a>
-                </span>
             </div>
         </div> <!-- end of container -->
     </nav> <!-- end of navbar -->
@@ -81,25 +81,46 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1>O QUE VOCÊ É?</h1>
                     <!-- Sign Up Form -->
-                    <div class="form-container">
-                        <form action="", method="post">
-                            <div class="form-group ">
-                                <select type="text" id="user" name="user" class="form-select"  required>
-                                    <option value="client">Cliente</option>
-                                    <option value="professional">Profissional</option>
-                                </select>
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <h1 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Lista de</span> Profissionais</h1>
+                        <form id="formAuthentication" class="mb-3" action="#" method="POST">
+                        <!-- Bordered Table -->
+                        <div class="card">
+                          <div class="card-body">
+                            <div class="table-responsive text-nowrap">
+                              <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Nome</th>
+                                    <th>Especialidade</th>
+                                    <th>Cidade/Estado</th>
+                                    <th>Atend. Domiciliar</th>
+                                    <th>Nº do Registro</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {% for list in lists %}
+                                    <tr>
+                                      <td>{{ list[9] }}</td>
+                                      <td>{{ list[1] }}</td>
+                                      <td>{{ list[6] }}</td>
+                                      {% if list[0] == 1 %}
+                                        <td> Sim </td>
+                                      {% else %}
+                                        <td> Não </td>
+                                      {% endif %}
+                                      <td>{{ list[2] }}</td>
+                                    </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
                             </div>
-                            <div class="form-group">
-                                <button type="submit" class="form-control-submit-button">CADASTRE-SE AGORA</button>
-                            </div>
-                            <div class="form-message">
-                                <div id="smsgSubmit" class="h3 text-center hidden"></div>
-                            </div>
+                          </div>
+                        </div>
                         </form>
-                    </div> <!-- end of form container -->
-                    <!-- end of sign up form -->
+                        <!--/ Bordered Table -->
+                      </div>
 
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -107,7 +128,22 @@
     </header> <!-- end of ex-header -->
     <!-- end of header -->
 
-
+    <!-- Footer -->
+    <!-- <svg class="footer-frame" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1920 79"><defs><style>.cls-2{fill:#5f4def;}</style></defs><title>footer-frame</title><path class="cls-2" d="M0,72.427C143,12.138,255.5,4.577,328.644,7.943c147.721,6.8,183.881,60.242,320.83,53.737,143-6.793,167.826-68.128,293-60.9,109.095,6.3,115.68,54.364,225.251,57.319,113.58,3.064,138.8-47.711,251.189-41.8,104.012,5.474,109.713,50.4,197.369,46.572,89.549-3.91,124.375-52.563,227.622-50.155A338.646,338.646,0,0,1,1920,23.467V79.75H0V72.427Z" transform="translate(0 -0.188)"/></svg> -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="footer-col endblock">
+                        <h4>Easy Health</h4>
+                        <p class="p-small">A saúde mais próxima de você!</p>
+                    </div>
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div> <!-- end of footer -->  
+    <!-- end of footer -->
+    	
     <!-- Scripts -->
     <script src="../static/js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
     <script src="../static/js/popper.min.js"></script> <!-- Popper tooltip library for Bootstrap -->

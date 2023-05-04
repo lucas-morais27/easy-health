@@ -1,44 +1,25 @@
-from flask import Flask
-from flask_migrate import Migrate
-from flask_restful import Api
-from models import db
-from schemas import ma
-
+from flask import Flask, redirect, request, session
 
 app = Flask(__name__, template_folder='templates')
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///easy_health.db"
-db.init_app(app)
-ma.init_app(app)
-api = Api(app)
+app.secret_key = "123"
 
-BASE_URL = 'http://127.0.0.1:5000'
-
-# Imports so Migrate can recognize tables
-from models.address_model import AddressModel
-from models.client_model import ClientModel
-from models.professional_model import ProfessionalModel
-from models.subspecialties_model import subspecilaty_professional, SubspecialtyModel
-from models.health_plan_model import health_plan_professional, HealthPlanModel
-from models.professional_address_model import ProfessionalAddressModel
-from models.client_address_model import ClientAddressModel
-
-
-Migrate(app, db)
-
-# API Resources
-from controllers.index_controller import IndexController
-api.add_resource(IndexController, '/', '/index')
-from controllers.client_controller import ClientController
-api.add_resource(ClientController, '/clients', '/clients/<int:id>')
-from controllers.professional_controller import ProfessionalController
-api.add_resource(ProfessionalController, '/professional', '/professional/<int:id>')
-from controllers.login_controller import LoginController
-api.add_resource(LoginController, '/log-in')
-from controllers.home_controller import HomeController
-api.add_resource(HomeController, '/home', endpoint='home')
-from controllers.signup_controller import SignupController
-api.add_resource(SignupController, '/sign-up')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+from controller.login_controller import login_bp
+app.register_blueprint(login_bp)
+from controller.home_controller import home_client_bp, home_professional_bp
+app.register_blueprint(home_client_bp)
+app.register_blueprint(home_professional_bp)
+from controller.signup_controller import signup_bp
+app.register_blueprint(signup_bp)
+from controller.index_controller import index_bp
+app.register_blueprint(index_bp)
+from controller.client_profile_controller import client_profile_bp
+app.register_blueprint(client_profile_bp)
+from controller.professional_profile_controller import professional_profile_bp
+app.register_blueprint(professional_profile_bp)
+from controller.list_professional_controller import list_professional_bp
+app.register_blueprint(list_professional_bp)
+from services.logout_service import logout_bp
+app.register_blueprint(logout_bp)
+            
+if __name__=='__main__':
+    app.run(host="0.0.0.0", port=8080, debug=True)

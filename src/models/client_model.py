@@ -1,9 +1,10 @@
-from models.user_model import UserModel
-from models import db
+class ClientModel():
+    def __init__(self, health_plan, name, email, password, phone_number):
+        self.health_plan = health_plan,
+        self.name = name,
+        self.email = email,
+        self.password = password,
+        self.phone_number = phone_number
 
-
-class ClientModel(UserModel):
-    __tablename__ = 'client'
-
-    address = db.relationship('ClientAddressModel', backref='client', uselist=False)
-    health_plan = db.Column(db.String, nullable=False)
+    def get_id(self):
+        return self.id
