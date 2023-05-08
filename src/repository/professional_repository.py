@@ -1,6 +1,6 @@
 from models import db
 
-class ProfessionalController():
+class ProfessionalRepository():
 
     def __init__(self):
         self.con = db
@@ -20,18 +20,27 @@ class ProfessionalController():
             sql = "SELECT * FROM professional WHERE email=%s AND password=%s"
             cursor = self.con.cursor()
             cursor.execute(sql, (email, password))
-            usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
-            return usuario 
+            return 1
         except:
-            return None
+            return 0
         
-    def find(self, id):
+    def find_by_email(self, email):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM professional WHERE email=%s"
+            cursor.execute(sql, (email,))
+            professional = cursor.fetchone()
+            return professional
+        except:
+            return 0
+        
+    def find_by_id(self, id):
         try:
             cursor = self.con.cursor()
             sql = "SELECT * FROM professional WHERE id=%s"
             cursor.execute(sql, (id,))
-            funcionario = cursor.fetchone()
-            return funcionario
+            professional = cursor.fetchone()
+            return professional
         except:
             return 0
         
@@ -40,8 +49,8 @@ class ProfessionalController():
             cursor = self.con.cursor()
             sql = "SELECT * FROM professional WHERE email=%s"
             cursor.execute(sql, (email,))
-            funcionario = cursor.fetchone()
-            return funcionario
+            professional = cursor.fetchone()
+            return professional
         except:
             return 0
         
@@ -60,3 +69,43 @@ class ProfessionalController():
                 return professionals
         except:
             return None
+        
+    def create_address(self, address):
+        try:
+            sql = "INSERT INTO professional_address(professional_id, state, city, street, complement) VALUES (%s, %s, %s, %s, %s)"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (address.professional_id, address.state, address.city, address.street, address.complement,))
+            self.con.commit()
+            return 1
+        except:
+            return 0
+        
+    def create_plan(self, plan):
+        try:
+            sql = "INSERT INTO health_plan(name) VALUES (%s)"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (plan.name,))
+            self.con.commit()
+            return 1
+        except:
+            return 0
+        
+    def find_address_by_id(self, id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM professional_address WHERE id=%s"
+            cursor.execute(sql, (id,))
+            address = cursor.fetchone()
+            return address
+        except:
+            return 0
+        
+    def find_plan_by_id(self, id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM health_plan_professional WHERE id=%s"
+            cursor.execute(sql, (id,))
+            plan = cursor.fetchone()
+            return plan
+        except:
+            return 0
