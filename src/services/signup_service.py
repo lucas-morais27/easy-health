@@ -29,8 +29,6 @@ class SignupService:
 			msg = ClientService().create(client_model)
 
 		return msg
-		
-	
 	
 	def create_professional(self, request):
 		msg = ''
@@ -56,16 +54,11 @@ class SignupService:
 			else:
 				home_service = 0
 
-			# professional_model = ProfessionalModel(provides_home_service=home_service, specialty=specialty, council_registration=int(registration), twitter=twitter, insta=insta, linkedin=linkedin, bio=bio, name=name, email=email, password=password, phone_number=int(phone_number))
-			
-			# id = professional[7]
+			professional_model = ProfessionalModel(provides_home_service=home_service, specialty=specialty, council_registration=int(registration), twitter=twitter, insta=insta, linkedin=linkedin, bio=bio, name=name, email=email, password=password, phone_number=int(phone_number))
 
-			# address_model = AddressProfessionalModel(professional_id=id, state=state, city=city, street=street, complement=complement)
-
-			# if address_controller > 0:
-			# 	msg = ("Cadastrado com sucesso!")
-			# else:
-			# 	msg = ("Erro ao cadastrar!")
+			msg = ProfessionalService().create(professional_model)
+				
+			#address_model = AddressProfessionalModel(professional_id=id, state=state, city=city, street=street, complement=complement)
 		return msg
 		
 

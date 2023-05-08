@@ -9,11 +9,11 @@ client_bp = Blueprint('client', __name__)
 
 class ClientController():
 
-    @client_bp.route('/client-profile', methods=['POST'])
+    @client_bp.route('/client-profile', methods=['GET','POST'])
     def client_profile():
 
         id = session['logado']['id']
-        client.find(id)
+        client.find_by_id(id)
         disable = request.form['disable']
         if disable:
             client_disable = client.disable(id)

@@ -3,8 +3,6 @@ from services.client_service import ClientService
 from services.professional_service import ProfessionalService
 from services.signup_service import SignupService
 
-client = ClientService()
-professional = ProfessionalService()
 signup = SignupService()
 
 index_bp = Blueprint('index', __name__)
@@ -33,11 +31,11 @@ class IndexController:
 	index_bp.auth = {
 		# acao: { perfil:permissao }
 		'log-out': {0:1, 1:1},
-		'client-profile': {0:1, 1:1},
-		'professional-profile': {0:1, 1:1},
-		'home-client': {0:1, 1:1},
-		'home-professional': {0:1, 1:1},
-		'list-professional': {0:1, 1:1},
+		'client-profile': {0:1},
+		'professional-profile': {1:1},
+		'home-client': {0:1},
+		'home-professional': {1:1},
+		'list-professional': {0:1},
 	}
 
 	@index_bp.before_request

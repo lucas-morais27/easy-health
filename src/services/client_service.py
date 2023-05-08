@@ -21,8 +21,11 @@ class ClientService():
             return 'Senha incorreta'
 
 
-    def find():
-        return 0
+    def find_by_id(self, id):
+        if ClientRepository().find_by_id(id):
+            return 'Encontrado'
+        else:
+            return 'Não encontrado'
     
     def disable():
         return 0
