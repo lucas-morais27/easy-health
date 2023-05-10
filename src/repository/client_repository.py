@@ -1,4 +1,5 @@
 from models import db
+from models.client_model import ClientModel
 
 class ClientRepository():
 
@@ -30,10 +31,10 @@ class ClientRepository():
             cursor = self.con.cursor()
             sql = "SELECT * FROM client WHERE id=%s"
             cursor.execute(sql, (id,))
-            funcionario = cursor.fetchone()
-            return funcionario
-        except:
-            return 0
+            client = cursor.fetchone()
+            return client
+        except NameError:
+            raise
         
     def find_by_email(self, email):
         try:
@@ -75,6 +76,17 @@ class ClientRepository():
             return 1
         except:
             return 0
+        
+    def find_address_by_client_id(self, id):
+        try:
+            sql = "SELECT * FROM client_adress WHERE client_id=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (id,))
+            address = cursor.fetchone()
+            return address
+        except:
+            return 0
+    
         
     def create_plan(self, plan):
         try:

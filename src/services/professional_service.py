@@ -26,5 +26,9 @@ class ProfessionalService():
     def disable():
         return 0
     
-    def list():
-        return 0
+    def list(self,id=None):
+        try:
+            professionals = ProfessionalRepository().list()
+        except NameError as err:
+            raise err
+        return professionals

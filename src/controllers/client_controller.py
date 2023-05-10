@@ -2,8 +2,8 @@ from flask import Blueprint, redirect, render_template, request, session
 from services.client_service import ClientService
 from services.professional_service import ProfessionalService
 
-client = ClientService()
-professional = ProfessionalService()
+clientService = ClientService()
+professionalService = ProfessionalService()
 
 client_bp = Blueprint('client', __name__)
 
@@ -13,24 +13,27 @@ class ClientController():
     def client_profile():
 
         id = session['logado']['id']
-        client.find_by_id(id)
-        disable = request.form['disable']
-        if disable:
-            client_disable = client.disable(id)
-            if client_disable:
-                return redirect('index')
+        client = clientService.find_by_id(id)
+        
+
+        if request.method == "POST":
+            disable = request.form['disable']
+            if disable:
+                client_disable = clientService.disable(id)
+                if client_disable:
+                    return redirect('index')
                 
         return render_template('client-profile.html', client=client, nome=client[3], id=id)
     
     @client_bp.route('/list-professional')
     def list():
-        lists = professional.list()
+        lists = professionalService.list()
         id = session['logado']['id']
         return render_template('list-professional.html', lists=lists, id=id)
     
     @client_bp.route('/professional-view', methods=['GET', 'POST'])
     def professional_view(id):
-        professional = ProfessionalService().find(id)
+        professional = professionalService.find(id)
         return render_template('professional-view.html', professional=professional, nome=professional[9], id=id)
     
     

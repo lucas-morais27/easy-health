@@ -22,10 +22,13 @@ class ClientService():
 
 
     def find_by_id(self, id):
-        if ClientRepository().find_by_id(id):
-            return 'Encontrado'
-        else:
-            return 'Não encontrado'
+        try:
+            client = ClientRepository().find_by_id(id)
+            
+        except NameError as err:
+            raise err
+        
+        return client
     
     def disable():
         return 0
