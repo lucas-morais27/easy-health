@@ -1,4 +1,4 @@
-from flask import session
+from flask import request, session
 from models.address_client_model import AddressClientModel
 from models.client_model import ClientModel
 from models.healthplan_model import HealthPlanModel
@@ -10,27 +10,22 @@ from services.professional_service import ProfessionalService
 
 class SignupService:
 	
-	def create_client(self, request):
-		msg = ''
-		if request.method == 'POST':
-			name = request.form['name']
-			email = request.form['email']
-			password = request.form['password']
-			phone_number = request.form['phone_number']
-			state = request.form['state']
-			city = request.form['city']
-			street = request.form['street']
-			complement = request.form['complement']
-			health_plan = request.form['health_plan']
-
-			address_model = AddressClientModel(client_id=id, state=state, city=city, street=street, complement=complement)
-			client_model = ClientModel(health_plan=health_plan, name=name, email=email, password=password, phone_number=int(phone_number), address=address_model)
-
+	def create_client(self, client):
+		if client is not None:
+			client_model = ClientModel(health_plan=client['health_plan'], name=client['name'], email=client['email'], password=client['password'], phone_number=int(client['phone_number']), address='')
 			msg = ClientService().create(client_model)
+
+		if msg == 'Usuário criado':
+			client_aux = ClientService().find_by_email(client['email'])
+			address_model = AddressClientModel(client_id=client_aux[1], state=client['state'], city=client['city'], street=client['street'], complement=client['complement'])
+			address = ClientService().create_address(address=address_model)
+
+			if address == 'Endereço criado':
+				msg = 'Usuário criado'
 
 		return msg
 	
-	def create_professional(self, request):
+	def create_professional(self):
 		msg = ''
 		if request.method == 'POST':
 			name = request.form['name']

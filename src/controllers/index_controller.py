@@ -1,6 +1,4 @@
 from flask import Blueprint, redirect, render_template, request, session
-from services.client_service import ClientService
-from services.professional_service import ProfessionalService
 from services.signup_service import SignupService
 
 signup = SignupService()
@@ -92,16 +90,6 @@ class IndexController:
 			elif user == 'professional':
 				return redirect('sign-up/professional')
 		return render_template('sign-up.html')
-	
-	@index_bp.route('/sign-up/client', methods=['GET', 'POST'])
-	def create_client():
-		msg = signup.create_client(request)
-		return render_template("sign-up-client.html", msg=msg)
-	
-	@index_bp.route('/sign-up/professional', methods=['GET', 'POST'])
-	def create_professional():
-		msg = signup.create_professional(request)
-		return render_template("sign-up-professional.html", msg=msg)
 	
 	@index_bp.route('/log-out')
 	def logout():

@@ -30,5 +30,22 @@ class ClientService():
         
         return client
     
+    def find_by_email(self, email):
+        try:
+            client = ClientRepository().find_by_email(email)
+            
+        except NameError as err:
+            raise err
+        
+        return client
+    
+    def create_address(self, address):
+        try:
+            address_aux = ClientRepository().create_address(address=address)
+        except NameError as err:
+            raise err
+        
+        return 'Endereço criado'
+    
     def disable():
         return 0

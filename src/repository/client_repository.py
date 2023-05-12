@@ -77,6 +77,7 @@ class ClientRepository():
         except:
             return 0
         
+        
     def find_address_by_client_id(self, id):
         try:
             sql = "SELECT * FROM client_adress WHERE client_id=%s"
