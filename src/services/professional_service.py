@@ -26,6 +26,14 @@ class ProfessionalService():
         except NameError as err:
             raise err
         return professional
+    
+    def find_by_id(self,id):
+        try:
+            professional = ProfessionalRepository().find_by_id(id=id)
+        except NameError as err:
+            raise err
+        return professional
+
 
     
     def disable():
