@@ -31,9 +31,9 @@ class ClientController():
 		id = session['logado']['id']
 		return render_template('list-professional.html', lists=lists, id=id)
 	
-	@client_bp.route('/professional-view', methods=['GET', 'POST'])
+	@client_bp.route('/professional-view/<id>', methods=['GET', 'POST'])
 	def professional_view(id):
-		professional = professionalService.find(id)
+		professional = professionalService.find_by_id(id)
 		return render_template('professional-view.html', professional=professional, nome=professional[9], id=id)
 	
 	@client_bp.route('/sign-up/client', methods=['GET', 'POST'])
