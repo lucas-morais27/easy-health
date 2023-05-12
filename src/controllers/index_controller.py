@@ -1,4 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session
+from services.client_service import ClientService
+from services.professional_service import ProfessionalService
 from services.signup_service import SignupService
 
 signup = SignupService()
@@ -61,8 +63,9 @@ class IndexController:
 			email = request.form['email']
 			password = request.form['password']
 			
-			client = SignupService().authenticate_user(email=email, password=password)
-			if client:
+			client_authenticate = ClientService().authenticate(email=email, password=password)
+			if client_authenticate == 'ok':
+				client = ClientService().find_by_email(email=email)
 				session['logado'] = {
 					'id': client[1],
 					'nome': client[3],
@@ -70,8 +73,9 @@ class IndexController:
 				}
 				return redirect('home-client')
 			
-			professional = SignupService().authenticate_user(email=email, password=password)
-			if professional:
+			professional_authenticatel = ProfessionalService().authenticate(email=email, password=password)
+			if professional_authenticatel == 'ok' :
+				professional = ProfessionalService().find_by_email(email=email)
 				session['logado'] = {
 					'id': professional[7],
 					'nome': professional[9],

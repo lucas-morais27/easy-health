@@ -57,21 +57,21 @@ class SignupService:
 		return msg
 		
 
-	def authenticate_user(self, email, password):
-		client_service = ClientService().authenticate(email=email, password=password)
-		professional_service = ProfessionalService().authenticate(email=email, password=password)
+	# def authenticate_user(self, email, password):
+	# 	client_service = ClientService().authenticate(email=email, password=password)
+	# 	professional_service = ProfessionalService().authenticate(email=email, password=password)
 
-		if not client_service == 'Email inexistente':
-			if client_service == 'Ok':
-				client = ClientRepository().find_by_email(email=email)
-				return client
-			else:
-				return client_service
-		elif not professional_service == 'Email inexistente':
-			if professional_service == 'Ok':
-				professional = ProfessionalRepository().find_by_email(email=email)
-				return professional
-			else:
-				return professional_service
-		else:
-			return 'Usuário não cadastrado'
+	# 	if not client_service == 'Email inexistente':
+	# 		if client_service == 'Ok':
+	# 			client = ClientRepository().find_by_email(email=email)
+	# 			return client
+	# 		else:
+	# 			return client_service
+	# 	elif not professional_service == 'Email inexistente':
+	# 		if professional_service == 'Ok':
+	# 			professional = ProfessionalRepository().find_by_email(email=email)
+	# 			return professional
+	# 		else:
+	# 			return professional_service
+	# 	else:
+	# 		return 'Usuário não cadastrado'

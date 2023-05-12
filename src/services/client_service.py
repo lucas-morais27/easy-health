@@ -16,7 +16,7 @@ class ClientService():
         if not ClientRepository().get_client(email=email)[2]:
             return 'Usuário desativo'
         elif ClientRepository().authenticate(email=email, password=password):
-            return 'Ok'
+            return 'ok'
         else:
             return 'Senha incorreta'
 
