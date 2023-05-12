@@ -13,15 +13,28 @@ class ProfessionalService():
     def authenticate(self, email, password):
         if not ProfessionalRepository().find_by_email(email=email):
             return 'Email inexistente'
-        if not ProfessionalRepository().get_client(email=email)[9]:
+        if not ProfessionalRepository().get_professional(email=email)[9]:
             return 'Usuário desativo'
         elif ProfessionalRepository().authenticate(email=email, password=password):
-            return 'Ok'
+            return 'ok'
         else:
             return 'Senha incorreta'
     
-    def find():
-        return 0
+    def find_by_id(self,id):
+        try:
+            professional = ProfessionalRepository().find_by_id(id=id)
+        except NameError as err:
+            raise err
+            
+        return professional
+    
+    def get_by_email(self,email):
+        try:
+            professional = ProfessionalRepository().find_by_email(email=email)
+        except NameError as err:
+            raise err
+            
+        return professional
     
     def disable():
         return 0

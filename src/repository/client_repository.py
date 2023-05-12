@@ -21,8 +21,8 @@ class ClientRepository():
             sql = "SELECT * FROM client WHERE email=%s AND password=%s"
             cursor = self.con.cursor()
             cursor.execute(sql, (email, password))
-            usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
-            return usuario 
+            #usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
+            return 1 
         except:
             return 0
         
@@ -33,8 +33,8 @@ class ClientRepository():
             cursor.execute(sql, (id,))
             client = cursor.fetchone()
             return client
-        except NameError:
-            raise
+        except :
+            return 0
         
     def find_by_email(self, email):
         try:

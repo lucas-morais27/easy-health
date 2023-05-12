@@ -62,24 +62,31 @@ class IndexController:
 		if request.method == "POST":
 			email = request.form['email']
 			password = request.form['password']
-			
-			client = SignupService().authenticate_user(email=email, password=password)
-			if client:
+
+
+			client_authenticate = ClientService().authenticate(email=email, password=password)
+			if client_authenticate == 'ok':
+				client = ClientService().get_by_email(email=email)
 				session['logado'] = {
 					'id': client[1],
 					'nome': client[3],
 					'tipo': 0
 				}
 				return redirect('home-client')
-			
-			professional = SignupService().authenticate_user(email=email, password=password)
-			if professional:
+
+			professional_authenticate = ProfessionalService().authenticate(email=email, password=password)
+			if professional_authenticate == 'ok':
+				professional = ProfessionalService().get_by_email(email=email)
 				session['logado'] = {
 					'id': professional[7],
 					'nome': professional[9],
 					'tipo': 1
 				}
 				return redirect('home-professional')
+			
+			
+			
+			
 
 		return render_template('log-in.html', msg=msg)
 	
