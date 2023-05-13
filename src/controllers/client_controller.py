@@ -1,12 +1,9 @@
 from flask import Blueprint, redirect, render_template, request, session
 from services.client_service import ClientService
 from services.professional_service import ProfessionalService
-from services.signup_service import SignupService
 
-clientService = ClientService()
-professionalService = ProfessionalService()
-signup = SignupService()
-
+client_service = ClientService()
+professional_service = ProfessionalService()
 client_bp = Blueprint('client', __name__)
 
 class ClientController():
@@ -15,11 +12,11 @@ class ClientController():
 	def client_profile():
 
 		id = session['logado']['id']
-		client = clientService.find_by_id(id)
+		client = client_service.find_by_id(id)
 		if request.method == "POST":
 			disable = request.form['disable']
 			if disable:
-				client_disable = clientService.disable(id)
+				client_disable = client_service.disable(id)
 				if client_disable:
 					return redirect('index')
 				
@@ -27,13 +24,13 @@ class ClientController():
 	
 	@client_bp.route('/list-professional')
 	def list():
-		lists = professionalService.list()
+		lists = professional_service.list()
 		id = session['logado']['id']
 		return render_template('list-professional.html', lists=lists, id=id)
 	
 	@client_bp.route('/professional-view/<id>', methods=['GET', 'POST'])
 	def professional_view(id):
-		professional = professionalService.find_by_id(id)
+		professional = professional_service.find_by_id(id)
 		return render_template('professional-view.html', professional=professional, nome=professional[9], id=id)
 	
 	@client_bp.route('/sign-up/client', methods=['GET', 'POST'])
@@ -54,7 +51,7 @@ class ClientController():
 				'name': name,
 				'email': email,
 				'password': password,
-				'phone_number': phone_number,
+				'phone_number': int(phone_number),
 				'state': state,
 				'city': city,
 				'street': street,
@@ -62,6 +59,6 @@ class ClientController():
 				'health_plan': health_plan
 				}
 			
-			msg = signup.create_client(client)
+			msg = client_service.create(client)
 		return render_template("sign-up-client.html", msg=msg)
 	

@@ -1,9 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, session
 from services.client_service import ClientService
 from services.professional_service import ProfessionalService
-from services.signup_service import SignupService
-
-signup = SignupService()
 
 index_bp = Blueprint('index', __name__)
 

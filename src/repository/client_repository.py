@@ -1,5 +1,4 @@
 from models import db
-from models.client_model import ClientModel
 
 class ClientRepository():
 

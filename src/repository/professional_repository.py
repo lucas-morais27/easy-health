@@ -109,3 +109,13 @@ class ProfessionalRepository():
             return plan
         except:
             return 0
+        
+    def disable(self, id):
+        try:
+            sql = "UPDATE professional SET active=0 WHERE id=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (id,))
+            self.con.commit()
+            return cursor.rowcount
+        except:
+            return 0
