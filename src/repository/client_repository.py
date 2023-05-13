@@ -1,6 +1,6 @@
 from models import db
 
-class ClientController():
+class ClientRepository():
 
     def __init__(self):
         self.con = db
@@ -23,13 +23,23 @@ class ClientController():
             usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
             return usuario 
         except:
-            return None
+            return 0
         
-    def find(self, id):
+    def find_by_id(self, id):
         try:
             cursor = self.con.cursor()
             sql = "SELECT * FROM client WHERE id=%s"
             cursor.execute(sql, (id,))
+            client = cursor.fetchone()
+            return client
+        except NameError:
+            raise
+        
+    def find_by_email(self, email):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM client WHERE email=%s"
+            cursor.execute(sql, (email,))
             funcionario = cursor.fetchone()
             return funcionario
         except:
@@ -52,5 +62,38 @@ class ClientController():
             cursor.execute(sql, (email,))
             funcionario = cursor.fetchone()
             return funcionario
+        except:
+            return 0
+        
+
+    def create_address(self, address):
+        try:
+            sql = "INSERT INTO client_address(client_id, state, city, street, complement) VALUES (%s, %s, %s, %s, %s)"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (address.client_id, address.state, address.city, address.street, address.complement,))
+            self.con.commit()
+            return 1
+        except:
+            return 0
+        
+        
+    def find_address_by_client_id(self, id):
+        try:
+            sql = "SELECT * FROM client_adress WHERE client_id=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (id,))
+            address = cursor.fetchone()
+            return address
+        except:
+            return 0
+    
+        
+    def create_plan(self, plan):
+        try:
+            sql = "INSERT INTO health_plan(name) VALUES (%s)"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (plan.name,))
+            self.con.commit()
+            return 1
         except:
             return 0
