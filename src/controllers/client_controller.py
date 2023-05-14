@@ -1,10 +1,14 @@
 from flask import Blueprint, redirect, render_template, request, session
+from services.appointment_service import AppointmentService
+from models.appointment_model import AppointmentModel
 from services.client_service import ClientService
 from services.professional_service import ProfessionalService
 
 client_service = ClientService()
 professional_service = ProfessionalService()
 client_bp = Blueprint('client', __name__)
+
+appointmentService = AppointmentService()
 
 class ClientController():
 
@@ -62,3 +66,11 @@ class ClientController():
 			msg = client_service.create(client)
 		return render_template("sign-up-client.html", msg=msg)
 	
+	@client_bp.route('/client/appointment/<id>', methods=['GET', 'POST'])
+	def view_appointment(id):
+		appointment = appointmentService.find_by_id(id=id)
+		if appointment == None:
+			return "horario de consulta não existe"
+		msg = "id: %s \nclient_id: %s \n professional_id: %s \n dateTime: %s \nstatus: %s" \
+		% (appointment.id, appointment.client_id,appointment.professional_id,appointment.dateTime, appointment.status)
+		return msg

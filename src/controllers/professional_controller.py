@@ -1,8 +1,12 @@
 from flask import Blueprint, redirect, render_template, request, session
 from services.professional_service import ProfessionalService
+from services.appointment_service import AppointmentService
 
 professional_service = ProfessionalService()
 professional_bp = Blueprint('professional', __name__)
+
+appointmentService = AppointmentService()
+
 
 class ProfessionalController():
 
@@ -65,3 +69,12 @@ class ProfessionalController():
 			
 			msg = professional_service.create(professional)
 		return render_template("sign-up-professional.html", msg=msg)
+	
+	@professional_bp.route('/professional/appointment/<id>', methods=['GET', 'POST'])
+	def view_appointment(id):
+		appointment = appointmentService.find_by_id(id=id)
+		if appointment == None:
+			return render_template("horario de consulta não existe")
+		msg = "id: %s \nclient_id: %s \n professional_id: %s \n dateTime: %s \nstatus: %s" \
+		% (appointment.id, appointment.client_id,appointment.professional_id,appointment.dateTime, appointment.status)
+		return msg
