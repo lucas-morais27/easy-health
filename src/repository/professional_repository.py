@@ -1,6 +1,7 @@
 from models import db
+from repository.professional_repository_interface import IProfessionalRepository
 
-class ProfessionalRepository():
+class ProfessionalRepository(IProfessionalRepository):
 
     def __init__(self):
         self.con = db
