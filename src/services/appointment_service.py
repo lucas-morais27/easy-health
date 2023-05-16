@@ -101,8 +101,10 @@ class AppointmentService():
                 item = [
                     appointments[i].id,
                     self.profRep.find_by_id(appointments[i].professional_id)[9],
-                    appointments[i].dateTime,
+                    appointments[i].dateTime[0],
                     appointments[i].status
                 ]
+                print(type(item[1]) , " - " , item[1])
+                print(type(item[2]) , " - " , item[2])
                 lista.append(item)
         return lista

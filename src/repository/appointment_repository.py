@@ -93,8 +93,7 @@ class AppointmentRepository():
     def list_by_professional(self,professional_id):
         try:
             cursor = self.con.cursor()
-            sql = "SELECT * FROM appointment WHERE professional_id=%s ORDER BY dateTime asc"
-            cursor.execute(sql, (professional_id))
+            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status FROM appointment WHERE professional_id={professional_id} ORDER BY dateTime asc"
             results = cursor.fetchall()
             appointments = []
             for result in results:
@@ -108,8 +107,8 @@ class AppointmentRepository():
     def list_avalible_by_professional(self,professional_id):
         try:
             cursor = self.con.cursor()
-            sql = "SELECT * FROM appointment WHERE professional_id=%s and status=1 ORDER BY dateTime asc"
-            cursor.execute(sql, (professional_id))
+            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status FROM appointment WHERE professional_id={professional_id} ORDER BY dateTime asc"
+            cursor.execute(sql)
             results = cursor.fetchall()
             appointments = []
             for result in results:
@@ -124,8 +123,8 @@ class AppointmentRepository():
     def list_by_client(self,client_id):
         try:
             cursor = self.con.cursor()
-            sql = "SELECT * FROM appointment WHERE client_id=%s ORDER BY dateTime asc"
-            cursor.execute(sql, (client_id,))
+            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status FROM appointment WHERE client_id={client_id} ORDER BY dateTime asc"
+            cursor.execute(sql)
             results = cursor.fetchall()
             appointments = []
             for result in results:
