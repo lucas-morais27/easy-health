@@ -1,6 +1,7 @@
 from models import db
+from repository.client_repository_interface import IClientRepository
 
-class ClientRepository():
+class ClientRepository(IClientRepository):
 
     def __init__(self):
         self.con = db

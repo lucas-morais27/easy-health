@@ -1,7 +1,8 @@
 from models import db
 from models.appointment_model import AppointmentModel
+from repository.appointment_repository_interface import IAppointmentRepository
 
-class AppointmentRepository():
+class AppointmentRepository(IAppointmentRepository):
 
     def __init__(self):
         self.con = db
