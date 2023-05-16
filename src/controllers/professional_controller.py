@@ -78,3 +78,10 @@ class ProfessionalController():
 		msg = "id: %s \nclient_id: %s \n professional_id: %s \n dateTime: %s \nstatus: %s" \
 		% (appointment.id, appointment.client_id,appointment.professional_id,appointment.dateTime, appointment.status)
 		return msg
+	
+	@professional_bp.route('/professional/appointments')
+	def list_appointments():
+		
+		id = session['logado']['id']
+		appointments = appointmentService.list_by_professional(id)
+		return render_template('appointments-view-professional.html', list=appointments, id=id)

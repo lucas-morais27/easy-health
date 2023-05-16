@@ -9,7 +9,7 @@ class AppointmentRepository():
     #cria um appointment com referencia ao proficional, status aberto e sem client
     def create(self, appointment):
         try:
-            sql = "INSERT INTO appointment(professional_id, dateTime , status) VALUES(%s,STR_TO_DATE(%s,'%m-%\d-%Y %H:%\i:%\s'),'aberto');"
+            sql = "INSERT INTO appointment(client_id, professional_id, dateTime, status, description) VALUES(%s, %s, %s, %s, %s);"
             cursor = self.con.cursor()
             cursor.execute(sql, (appointment.profession_id, appointment.dateTime))
             self.con.commit()

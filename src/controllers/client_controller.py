@@ -34,7 +34,23 @@ class ClientController():
 	
 	@client_bp.route('/professional-view/<id>', methods=['GET', 'POST'])
 	def professional_view(id):
+		msg = ''
 		professional = professional_service.find_by_id(id)
+		client_id = session['logado']['id']
+		if request.method == "POST":
+			disable = request.form['disable']
+			bio = request.form['bio']
+			if disable:
+				appointment = {
+					'client_id': client_id,
+					'professional_id': id,
+					'description': bio
+				}
+
+				msg = appointmentService.create(appointment=appointment)
+				if msg == 'agendamento criado':
+					return redirect('../home-client')
+				
 		return render_template('professional-view.html', professional=professional, nome=professional[9], id=id)
 	
 	@client_bp.route('/sign-up/client', methods=['GET', 'POST'])

@@ -15,15 +15,17 @@ class AppointmentService():
         return msg
 
     #apenas professional tem acesso
-    def create(self, appointment:AppointmentModel)->str:
-        msg = ""
-        if self.apRep.find_by_professional_and_date(professional_id=appointment.professional_id,
-                                                    date=appointment.dateTime):
-            msg = "profissional ja possui um horario de consulta com esse mesmo horario e data"
-        if self.apRep.create(appointment=appointment):
-            msg = "horario de consulta criado"
-        msg = "Não foi possivel criar o horario de consulta, erro interno"
-        return msg
+    def create(self, appointment):
+        appointment_model = AppointmentModel(
+            client_id=appointment['client_id'],
+            professional_id=appointment['professional_id'],
+            dateTime='00/00/00 00:00:00',
+            status='aberto',
+            description=appointment['description']
+        )
+        if self.apRep.create(appointment=appointment_model):
+            return 'agendamento criado'
+        return 'falha ao criar agendamento'
         
     def find_by_id(self, id):
         return self.apRep.find_by_id(id=id)
@@ -81,9 +83,22 @@ class AppointmentService():
         return "Não foi possivel excluir o horario de consulta, erro interno"
     
     def list_by_professional(self, professional_id):
-        if self.profRep.find_by_id(id=professional_id) == 0:
-            return "profissional não encontrado"
-        return self.apRep.list_by_professional(professional_id=professional_id)
+        if self.clintRep.find_by_id(id=professional_id) == 0:
+            return "professionale não encontrado"
+        appointments =  self.apRep.list_by_professional(professional_id=professional_id)
+        lista = []
+        if appointments != None:
+            for i in range(len(appointments)):
+                item = [
+                    appointments[i].id,
+                    self.profRep.find_by_id(appointments[i].professional_id)[9],
+                    appointments[i].dateTime[0],
+                    appointments[i].status
+                ]
+                print(type(item[1]) , " - " , item[1])
+                print(type(item[2]) , " - " , item[2])
+                lista.append(item)
+        return lista
     
     def list_avalible_by_professional(self, professional_id):
         if self.profRep.find_by_id(id=professional_id) == 0:
