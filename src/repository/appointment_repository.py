@@ -89,3 +89,49 @@ class AppointmentRepository():
             return cursor.rowcount
         except:
             return 0
+    
+    def list_by_professional(self,professional_id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM appointment WHERE professional_id=%s ORDER BY dateTime asc"
+            cursor.execute(sql, (professional_id))
+            results = cursor.fetchall()
+            appointments = []
+            for result in results:
+                appointment = AppointmentModel(id=result[0],client_id=result[1],professional_id=result[2],
+                                           dateTime=result[3],status=result[4])
+                appointments.append(appointment)
+            return appointments
+        except:
+            return None
+        
+    def list_avalible_by_professional(self,professional_id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM appointment WHERE professional_id=%s and status=1 ORDER BY dateTime asc"
+            cursor.execute(sql, (professional_id))
+            results = cursor.fetchall()
+            appointments = []
+            for result in results:
+                appointment = AppointmentModel(id=result[0],client_id=result[1],professional_id=result[2],
+                                           dateTime=result[3],status=result[4])
+                appointments.append(appointment)
+            return appointments
+        except:
+            return None
+
+
+    def list_by_client(self,client_id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM appointment WHERE client_id=%s ORDER BY dateTime asc"
+            cursor.execute(sql, (client_id,))
+            results = cursor.fetchall()
+            appointments = []
+            for result in results:
+                appointment = AppointmentModel(id=result[0],client_id=result[1],professional_id=result[2],
+                                           dateTime=result[3],status=result[4])
+                appointments.append(appointment)
+            return appointments
+        except NameError as err:
+            raise err

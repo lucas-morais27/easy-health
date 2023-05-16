@@ -1,9 +1,18 @@
+import datetime
 from repository.appointment_repository import AppointmentRepository
 from models.appointment_model import AppointmentModel
+from repository.professional_repository import ProfessionalRepository
+from repository.client_repository import ClientRepository
 class AppointmentService():
     
     def __init__(self) -> None:
         self.apRep = AppointmentRepository()
+        self.profRep = ProfessionalRepository()
+        self.clintRep = ClientRepository()
+
+    def date_to_str(self,date:datetime.datetime):
+        msg = date.strftime('%d/%m/%Y - %H:%M')
+        return msg
 
     #apenas professional tem acesso
     def create(self, appointment:AppointmentModel)->str:
@@ -70,3 +79,30 @@ class AppointmentService():
         if self.delete(id=id):
             return "harario de consulta excluido"
         return "Não foi possivel excluir o horario de consulta, erro interno"
+    
+    def list_by_professional(self, professional_id):
+        if self.profRep.find_by_id(id=professional_id) == 0:
+            return "profissional não encontrado"
+        return self.apRep.list_by_professional(professional_id=professional_id)
+    
+    def list_avalible_by_professional(self, professional_id):
+        if self.profRep.find_by_id(id=professional_id) == 0:
+            return "profissional não encontrado"
+        return self.apRep.list_avalible_by_professional(professional_id=professional_id)
+        
+    
+    def list_by_client(self,client_id):
+        if self.clintRep.find_by_id(id=client_id) == 0:
+            return "cliente não encontrado"
+        appointments =  self.apRep.list_by_client(client_id=client_id)
+        lista = []
+        if appointments != None:
+            for i in range(len(appointments)):
+                item = [
+                    appointments[i].id,
+                    self.profRep.find_by_id(appointments[i].professional_id)[9],
+                    appointments[i].dateTime,
+                    appointments[i].status
+                ]
+                lista.append(item)
+        return lista
