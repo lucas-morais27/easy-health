@@ -40,8 +40,10 @@ class ClientController():
 		if request.method == "POST":
 			disable = request.form['disable']
 			bio = request.form['bio']
+			datetime = request.form['time']
 			if disable:
 				appointment = {
+					'datetime': datetime,
 					'client_id': client_id,
 					'professional_id': id,
 					'description': bio
@@ -82,18 +84,19 @@ class ClientController():
 			msg = client_service.create(client)
 		return render_template("sign-up-client.html", msg=msg)
 	
-	@client_bp.route('/client/appointment/<id>', methods=['GET', 'POST'])
+	@client_bp.route('/client/appointment-<id>', methods=['GET', 'POST'])
 	def view_appointment(id):
+		msg = ''
 		appointment = appointmentService.find_by_id(id=id)
+		professional = professional_service.find_by_id(appointment.professional_id)
+		client = client_service.find_by_id(appointment.client_id)
+
 		if appointment == None:
-			return "horario de consulta não existe"
-		msg = "id: %s \nclient_id: %s \n professional_id: %s \n dateTime: %s \nstatus: %s" \
-		% (appointment.id, appointment.client_id,appointment.professional_id,appointment.dateTime, appointment.status)
-		return msg
+			msg = "Horário de consulta não existe"
+		return render_template("appointments-view-detail.html", msg=msg, appointment=appointment, professional=professional, client=client)
 
 	@client_bp.route('/client/appointments')
 	def list_appointments():
-		
 		id = session['logado']['id']
 		appointments = appointmentService.list_by_client(id)
 		return render_template('appointments-view-client.html', list=appointments, id=id)

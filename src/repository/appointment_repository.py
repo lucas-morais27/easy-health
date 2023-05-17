@@ -10,9 +10,14 @@ class AppointmentRepository(IAppointmentRepository):
     #cria um appointment com referencia ao proficional, status aberto e sem client
     def create(self, appointment):
         try:
-            sql = "INSERT INTO appointment(client_id, professional_id, dateTime, status, description) VALUES(%s, %s, %s, %s, %s);"
+            sql = "INSERT INTO appointment(client_id, professional_id, dateTime, status, description) VALUES (%s, %s, %s, %s, %s)"
             cursor = self.con.cursor()
-            cursor.execute(sql, (appointment.profession_id, appointment.dateTime))
+            print(appointment.client_id)
+            print(appointment.professional_id)
+            print(appointment.dateTime)
+            print(appointment.status)
+            print(appointment.description)
+            cursor.execute(sql, (appointment.client_id, appointment.professional_id, appointment.dateTime, appointment.status, appointment.description,))
             self.con.commit()
             return 1
         except:
@@ -24,8 +29,8 @@ class AppointmentRepository(IAppointmentRepository):
             sql = "SELECT * FROM appointment WHERE id=%s"
             cursor.execute(sql, (id,))
             result = cursor.fetchone()
-            appointment = AppointmentModel(id=result[0],client_id=result[1],professional_id=result[2],
-                                           dateTime=result[3],status=result[4])
+            appointment = AppointmentModel(id=result[0], client_id=result[1], professional_id=result[2],
+                                            dateTime=result[3], status=result[4], description=result[5])
             return appointment
         except:
             return None
@@ -121,16 +126,16 @@ class AppointmentRepository(IAppointmentRepository):
             return None
 
 
-    def list_by_client(self,client_id):
+    def list_by_client(self, client_id):
         try:
             cursor = self.con.cursor()
-            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status FROM appointment WHERE client_id={client_id} ORDER BY dateTime asc"
+            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status, description FROM appointment WHERE client_id={client_id} ORDER BY dateTime asc"
             cursor.execute(sql)
             results = cursor.fetchall()
             appointments = []
             for result in results:
-                appointment = AppointmentModel(id=result[0],client_id=result[1],professional_id=result[2],
-                                           dateTime=result[3],status=result[4])
+                appointment = AppointmentModel(id=result[0], client_id=result[1],professional_id=result[2],
+                                           dateTime=result[3],status=result[4], description=result[5])
                 appointments.append(appointment)
             return appointments
         except NameError as err:

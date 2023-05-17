@@ -17,9 +17,10 @@ class AppointmentService():
     #apenas professional tem acesso
     def create(self, appointment):
         appointment_model = AppointmentModel(
+            id='',
             client_id=appointment['client_id'],
             professional_id=appointment['professional_id'],
-            dateTime='00/00/00 00:00:00',
+            dateTime=appointment['datetime'],
             status='aberto',
             description=appointment['description']
         )
@@ -83,20 +84,19 @@ class AppointmentService():
         return "Não foi possivel excluir o horario de consulta, erro interno"
     
     def list_by_professional(self, professional_id):
-        if self.clintRep.find_by_id(id=professional_id) == 0:
-            return "professionale não encontrado"
+        if self.profRep.find_by_id(id=professional_id) == 0:
+            return "professional não encontrado"
         appointments =  self.apRep.list_by_professional(professional_id=professional_id)
         lista = []
         if appointments != None:
             for i in range(len(appointments)):
                 item = [
-                    appointments[i].id,
                     self.profRep.find_by_id(appointments[i].professional_id)[9],
-                    appointments[i].dateTime[0],
-                    appointments[i].status
+                    appointments[i].dateTime,
+                    appointments[i].status,
+                    appointments[i].professional_id,
+                    appointments[i].get_id()
                 ]
-                print(type(item[1]) , " - " , item[1])
-                print(type(item[2]) , " - " , item[2])
                 lista.append(item)
         return lista
     
@@ -114,12 +114,11 @@ class AppointmentService():
         if appointments != None:
             for i in range(len(appointments)):
                 item = [
-                    appointments[i].id,
                     self.profRep.find_by_id(appointments[i].professional_id)[9],
-                    appointments[i].dateTime[0],
-                    appointments[i].status
+                    appointments[i].dateTime,
+                    appointments[i].status,
+                    appointments[i].professional_id,
+                    appointments[i].get_id()
                 ]
-                print(type(item[1]) , " - " , item[1])
-                print(type(item[2]) , " - " , item[2])
                 lista.append(item)
         return lista

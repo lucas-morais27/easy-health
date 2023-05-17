@@ -18,7 +18,7 @@
 	<meta property="og:type" content="article" />
 
     <!-- Website Title -->
-    <title>Professionals - Easy Health</title>
+    <title>Appointment Details - Easy Health</title>
     
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
@@ -52,7 +52,7 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index">Tivo</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="../home-professional"><img src="../static/images/logo.png" alt="alternative"></a> 
+            <a class="navbar-brand logo-image" href="/home-client"><img src="../static/images/logo.png" alt="alternative"></a> 
             
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,10 +64,10 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link page-scroll" href="../professional-profile">Seu Perfil<span class="sr-only">(current)</span></a>
+                        <a class="nav-link page-scroll" href="/client/appointments">Minhas Consultas<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link page-scroll" href="../log-out"></i>Sair <i class="fas fa-angle-double-right"></i><span class="sr-only">(current)</span></a>
+                        <a class="nav-link page-scroll" href="/log-out"></i>Sair <i class="fas fa-angle-double-right"></i><span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
             </div>
@@ -81,39 +81,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
+                    <h1>Consulta de {{ client[3] }}</h1><br>
                     <!-- Sign Up Form -->
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <h1 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Lista de</span> Consultas</h1>
-                        <form id="formAuthentication" class="mb-3" action="#" method="POST">
-                        <!-- Bordered Table -->
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="table-responsive text-nowrap">
-                              <table class="table table-bordered">
-                                <thead>
-                                  <tr>
-                                    <th>Profissional</th>
-                                    <th>Data - Horário</th>
-                                    <th>Status</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% for appointment in list %}
-                                    <tr>
-                                      <td><a href="/professional/appointment/{{appointment[0]}}">{{ appointment[1] }}</a></td>
-                                      <td>{{ appointment[2] }}</td>
-                                      <td>{{ appointment[3] }}</td>
-                                    </tr>
-                                  {% endfor %}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                        </form>
-                        <!--/ Bordered Table -->
-                      </div>
-
+                    <div class="form-container">
+                        <h4>Atendente</h4>
+                        <h5><i> {{ professional[9] }} </i></h5>
+                        <h4>Contatos</h4>
+                        <h5><i> {{ professional[10] }} </i></h5>
+                        <h5><i> {{ professional[12] }} </i></h5>
+                        <h4>Data | Hora</h4>
+                        <h5><i> {{ appointment.dateTime }}</i></h5>
+                        <h4>Status</h4>
+                        {% if appointment.status == 'aberto' %}
+                            <h5 style="color: rgb(96, 173, 18);"><i> {{ appointment.status }}</i></h5>
+                        {% elif appointment.status == 'fechado' %}
+                            <h5><i> {{ appointment.status }}</i></h5>
+                        {% else %}
+                            <h5><i> {{ appointment.status }}</i></h5>
+                        {% endif %}
+                        <h4>Descrição</h4>
+                        <h5><i> {{ appointment.description }}</i></h5>
+                    </div> <!-- end of form container -->
+                    <!-- end of sign up form -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of container -->

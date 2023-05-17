@@ -70,14 +70,14 @@ class ProfessionalController():
 			msg = professional_service.create(professional)
 		return render_template("sign-up-professional.html", msg=msg)
 	
-	@professional_bp.route('/professional/appointment/<id>', methods=['GET', 'POST'])
+	@professional_bp.route('/professional/appointments/<id>', methods=['GET', 'POST'])
 	def view_appointment(id):
 		appointment = appointmentService.find_by_id(id=id)
 		if appointment == None:
-			return render_template("horario de consulta não existe")
+			msg = "horario de consulta não existe"
 		msg = "id: %s \nclient_id: %s \n professional_id: %s \n dateTime: %s \nstatus: %s" \
 		% (appointment.id, appointment.client_id,appointment.professional_id,appointment.dateTime, appointment.status)
-		return msg
+		return render_template("appointments-view-detail.html", msg=msg)
 	
 	@professional_bp.route('/professional/appointments')
 	def list_appointments():
