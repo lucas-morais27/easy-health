@@ -89,24 +89,28 @@
                         <div class="card">
                           <div class="card-body">
                             <div class="table-responsive text-nowrap">
-                              <table class="table table-bordered">
-                                <thead>
-                                  <tr>
-                                    <th>Profissional</th>
-                                    <th>Data - Horário</th>
-                                    <th>Status</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {% for appointment in list %}
-                                    <tr>
-                                      <td><a href="/professional/appointment/{{appointment[0]}}">{{ appointment[1] }}</a></td>
-                                      <td>{{ appointment[2] }}</td>
-                                      <td>{{ appointment[3] }}</td>
-                                    </tr>
-                                  {% endfor %}
-                                </tbody>
-                              </table>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Data - Horário</th>
+                                            <th>Status</th>
+                                            <th>Gerenciar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for appointment in list %}
+                                        <tr>
+                                            <td>{{ appointment[1] }}</td>
+                                            {% if appointment[2] == '' %}
+                                                <td> cancelado </td>
+                                            {% else: %}
+                                                <td> {{ appointment[2] }}</td>
+                                            {% endif %}
+                                            <td><a href="/professional/appointment-{{appointment[4]}}"><i class="far fa-edit"></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
                           </div>
                         </div>

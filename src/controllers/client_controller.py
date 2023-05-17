@@ -30,7 +30,11 @@ class ClientController():
 	def list():
 		lists = professional_service.list()
 		id = session['logado']['id']
-		return render_template('list-professional.html', lists=lists, id=id)
+		address = []
+		for prof in lists:
+			auxiliar = professional_service.get_address_by_id(id=id)
+			address.append(auxiliar)
+		return render_template('list-professional.html', lists=lists, id=id, address=address)
 	
 	@client_bp.route('/professional-view/<id>', methods=['GET', 'POST'])
 	def professional_view(id):
@@ -45,7 +49,7 @@ class ClientController():
 				appointment = {
 					'datetime': datetime,
 					'client_id': client_id,
-					'professional_id': id,
+					'professional_id': professional[7],
 					'description': bio
 				}
 
@@ -82,6 +86,8 @@ class ClientController():
 				}
 			
 			msg = client_service.create(client)
+			if msg == 'Usuário criado':
+				return redirect('/log-in')
 		return render_template("sign-up-client.html", msg=msg)
 	
 	@client_bp.route('/client/appointment-<id>', methods=['GET', 'POST'])
@@ -93,10 +99,11 @@ class ClientController():
 
 		if appointment == None:
 			msg = "Horário de consulta não existe"
-		return render_template("appointments-view-detail.html", msg=msg, appointment=appointment, professional=professional, client=client)
+		return render_template("appointments-detail-client.html", msg=msg, appointment=appointment, professional=professional, client=client)
 
 	@client_bp.route('/client/appointments')
 	def list_appointments():
 		id = session['logado']['id']
+		tipo = session['logado']['tipo']
 		appointments = appointmentService.list_by_client(id)
-		return render_template('appointments-view-client.html', list=appointments, id=id)
+		return render_template('appointments-view-client.html', list=appointments, id=id, tipo=tipo)

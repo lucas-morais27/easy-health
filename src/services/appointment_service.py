@@ -21,7 +21,7 @@ class AppointmentService():
             client_id=appointment['client_id'],
             professional_id=appointment['professional_id'],
             dateTime=appointment['datetime'],
-            status='aberto',
+            status=1,
             description=appointment['description']
         )
         if self.apRep.create(appointment=appointment_model):
@@ -43,10 +43,12 @@ class AppointmentService():
             return "horario de consulta ja está agendada por outro cliente"
         if appointment.status == 3:
             return "consulta ja concluida"
-        if self.apRep.appoint(id=id,client_id=client_id):
-            return "consulta agendada com sucesso no horario: %s" % self.apRep.find_by_id(id).dateTime
+        if self.apRep.appoint(id=id, client_id=client_id):
+            return "consulta agendada com sucesso no horario"
         return "Não foi possivel agendar o horario de consulta, erro interno"
 
+    def default(self, id)->str:
+        return self.apRep.default(id=id)
 
     #client e professional tem acesso
     def cancel(self, id)->str:
@@ -71,7 +73,7 @@ class AppointmentService():
             return "horario de consulta não agendado"
         if appointment.status == 3:
             return "consulta ja concluida"
-        if self.apRep.cancel(id=id):
+        if self.apRep.conclude(id=id):
             return "consulta concluida"
         return "Não foi possivel concluir a consulta, erro interno"
 
