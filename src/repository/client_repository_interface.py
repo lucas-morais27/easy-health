@@ -36,3 +36,7 @@ class IClientRepository(ABC):
     @abstractmethod
     def create_plan(self, plan):
         pass
+
+    @abstractmethod
+    def delete(self, id):
+        pass

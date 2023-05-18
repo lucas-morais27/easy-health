@@ -1,4 +1,5 @@
 from models import db
+import MySQLdb
 from repository.client_repository_interface import IClientRepository
 
 class ClientRepository(IClientRepository):
@@ -7,14 +8,10 @@ class ClientRepository(IClientRepository):
         self.con = db
 
     def create(self, client):
-        try:
-            sql = "INSERT INTO client(health_plan, active, name, email, password, phone_number) VALUES (%s, %s, %s, %s, %s, %s)"
-            cursor = self.con.cursor()
-            cursor.execute(sql, (client.health_plan, 1, client.name, client.email, client.password, client.phone_number,))
-            self.con.commit()
-            return 1
-        except:
-            return 0
+        sql = "INSERT INTO client(health_plan, active, name, email, password, phone_number) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor = self.con.cursor()
+        cursor.execute(sql, (client.health_plan, 1, client.name, client.email, client.password, client.phone_number,))
+        self.con.commit()
         
     def authenticate(self, email, password):
         try:
@@ -73,9 +70,9 @@ class ClientRepository(IClientRepository):
             cursor = self.con.cursor()
             cursor.execute(sql, (address.client_id, address.state, address.city, address.street, address.complement,))
             self.con.commit()
-            return 1
-        except:
-            return 0
+            
+        except NameError as err:
+            raise err
         
         
     def find_address_by_client_id(self, id):
@@ -98,3 +95,13 @@ class ClientRepository(IClientRepository):
             return 1
         except:
             return 0
+        
+    def delete(self, id):
+        try:
+            sql = "DELETE FROM client WHERE id=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (id,))
+            self.con.commit()
+            #return cursor.rowcount
+        except NameError as err:
+            raise err

@@ -61,7 +61,10 @@ class ClientController():
 	
 	@client_bp.route('/sign-up/client', methods=['GET', 'POST'])
 	def create_client():
-		msg = ''
+
+		if request.method == 'GET':
+			return render_template("sign-up-client.html", msg="")
+		
 		if request.method == 'POST':
 			name = request.form['name']
 			email = request.form['email']
@@ -85,10 +88,11 @@ class ClientController():
 				'health_plan': health_plan
 				}
 			
-			msg = client_service.create(client)
-			if msg == 'Usuário criado':
-				return redirect('/log-in')
-		return render_template("sign-up-client.html", msg=msg)
+			try:
+				client_service.create(client)
+			except Exception as exception:
+				return render_template("sign-up-client.html", msg=exception)
+			return redirect('/log-in')
 	
 	@client_bp.route('/client/appointment-<id>', methods=['GET', 'POST'])
 	def view_appointment(id):

@@ -16,21 +16,22 @@ class ClientService():
 			)
 		
 		if ClientRepository().find_by_email(email=client_model.email) or ProfessionalRepository().find_by_email(email=client_model.email):
-			return 'Já existe um usuário com esse email'
+			raise Exception('Já existe um usuário com esse email')
 		
-		if ClientRepository().create(client_model):
-			client_aux = ClientService().find_by_email(client['email'])
+		try:
+			ClientRepository().create(client_model)
+		except NameError as err:
+			raise "Erro ao criar cliente: " + err
+		
+		client_aux = ClientService().find_by_email(client['email'])
 
-		if not client_aux:
-			return 'Erro ao criar cliente'
-		
-		address_model = AddressClientModel(client_id=client_aux[1], state=client['state'], city=client['city'], street=client['street'], complement=client['complement'])
-		address = ClientService().create_address(address=address_model)
+		try:
+			address_model = AddressClientModel(client_id=client_aux[1], state=client['state'], city=client['city'], street=client['street'], complement=client['complement'])
+			ClientService().create_address(address=address_model)
+		except:
+			ClientRepository().delete(id=client_aux[1])
+			raise Exception("Erro ao criar endereço: campo(s) com formato diferente do exigido")
 
-		if not address:
-			return 'Endereço não criado'
-		
-		return 'Usuário criado'
 	
 	def authenticate(self, email, password):
 		if not ClientRepository().find_by_email(email=email):
@@ -63,11 +64,11 @@ class ClientService():
 	
 	def create_address(self, address):
 		try:
-			address_aux = ClientRepository().create_address(address=address)
+			ClientRepository().create_address(address=address)
 		except NameError as err:
 			raise err
 		
-		return 'Endereço criado'
+		#return 'Endereço criado'
 	
 	def disable(self, id):
 		try:
