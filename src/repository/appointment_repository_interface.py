@@ -24,6 +24,10 @@ class IAppointmentRepository(ABC):
     @abstractmethod
     def cancel(self, id):
         pass
+
+    @abstractmethod
+    def default(self, id):
+        pass
     
     @abstractmethod
     def conclude(self, id):

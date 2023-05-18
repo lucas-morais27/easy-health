@@ -70,6 +70,14 @@ class ProfessionalService():
 		
 		return 'Endereço criado'
 	
+	def get_address_by_id(self, id):
+		try:
+			address_aux = ProfessionalRepository().get_address_by_id(id=id)
+		except NameError as err:
+			raise err
+		
+		return address_aux
+	
 	def disable(self, id):
 		try:
 			ProfessionalRepository().disable(id)

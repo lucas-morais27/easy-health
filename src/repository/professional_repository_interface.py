@@ -28,6 +28,10 @@ class IProfessionalRepository(ABC):
     @abstractmethod
     def create_address(self, address):
         pass
+
+    @abstractmethod
+    def get_address_by_id(self, address):
+        pass
     
     @abstractmethod
     def create_plan(self, plan):

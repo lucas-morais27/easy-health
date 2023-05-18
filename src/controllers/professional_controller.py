@@ -1,12 +1,12 @@
 from flask import Blueprint, redirect, render_template, request, session
 from services.professional_service import ProfessionalService
 from services.appointment_service import AppointmentService
+from services.client_service import ClientService
 
 professional_service = ProfessionalService()
+client_service = ClientService()
 professional_bp = Blueprint('professional', __name__)
-
 appointmentService = AppointmentService()
-
 
 class ProfessionalController():
 
@@ -68,20 +68,35 @@ class ProfessionalController():
 				}
 			
 			msg = professional_service.create(professional)
+			if msg == 'Usuário criado':
+				return redirect('/log-in')
 		return render_template("sign-up-professional.html", msg=msg)
 	
-	@professional_bp.route('/professional/appointment/<id>', methods=['GET', 'POST'])
+	@professional_bp.route('/professional/appointment-<id>', methods=['GET', 'POST'])
 	def view_appointment(id):
+		msg = ''
 		appointment = appointmentService.find_by_id(id=id)
-		if appointment == None:
-			return render_template("horario de consulta não existe")
-		msg = "id: %s \nclient_id: %s \n professional_id: %s \n dateTime: %s \nstatus: %s" \
-		% (appointment.id, appointment.client_id,appointment.professional_id,appointment.dateTime, appointment.status)
-		return msg
+		professional = professional_service.find_by_id(appointment.professional_id)
+		client = client_service.find_by_id(appointment.client_id)
+
+		if request.method == 'POST':
+			status = request.form['status']
+			if status == 'agendado':
+				appointmentService.appoint(id=id, client_id=appointment.client_id)
+			elif status == 'concluido':
+				appointmentService.conclude(id=id)
+			elif status == 'cancelado':
+				appointmentService.cancel(id=id)
+			else:
+				appointmentService.default(id=id)
+
+			return redirect('/professional/appointments')
+
+		return render_template("appointments-detail-professional.html", msg=msg, appointment=appointment, professional=professional, client=client)
 	
 	@professional_bp.route('/professional/appointments')
 	def list_appointments():
-		
 		id = session['logado']['id']
+		tipo = session['logado']['tipo']
 		appointments = appointmentService.list_by_professional(id)
-		return render_template('appointments-view-professional.html', list=appointments, id=id)
+		return render_template('appointments-view-professional.html', list=appointments, id=id, tipo=tipo)

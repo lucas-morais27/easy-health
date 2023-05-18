@@ -1,5 +1,6 @@
 class AppointmentModel():
-    def __init__(self, client_id, professional_id, dateTime, status, description):
+    def __init__(self, id, client_id, professional_id, dateTime, status, description):
+        self.id = id
         self.client_id = client_id
         self.professional_id = professional_id
         self.dateTime = dateTime

@@ -81,6 +81,16 @@ class ProfessionalRepository(IProfessionalRepository):
         except:
             return 0
         
+    def get_address_by_id(self, id):
+        try:
+            cursor = self.con.cursor()
+            sql = "SELECT * FROM professional_address WHERE professional_id=%s"
+            cursor.execute(sql, (id,))
+            address = cursor.fetchone()
+            return address
+        except:
+            return 0
+        
     def create_plan(self, plan):
         try:
             sql = "INSERT INTO health_plan(name) VALUES (%s)"
