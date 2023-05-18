@@ -32,9 +32,9 @@ class ClientController():
 		id = session['logado']['id']
 		address = []
 		for prof in lists:
-			auxiliar = professional_service.get_address_by_id(id=id)
+			auxiliar = professional_service.get_address_by_id(id=prof[7])
 			address.append(auxiliar)
-		return render_template('list-professional.html', lists=lists, id=id, address=address)
+		return render_template('list-professional.html', lists=lists, id=id, address=address, len=len(lists))
 	
 	@client_bp.route('/professional-view/<id>', methods=['GET', 'POST'])
 	def professional_view(id):

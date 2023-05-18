@@ -73,10 +73,12 @@ class ProfessionalService():
 	def get_address_by_id(self, id):
 		try:
 			address_aux = ProfessionalRepository().get_address_by_id(id=id)
+			address = ""
+			address = address_aux[4]+ ", "+ address_aux[5]+ ", "+ address_aux[3]+ " - "+ address_aux[2]  
 		except NameError as err:
 			raise err
 		
-		return address_aux
+		return address
 	
 	def disable(self, id):
 		try:

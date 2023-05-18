@@ -103,17 +103,17 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {% for list in lists %}
+                                  {% for i  in range(0,len) %}
                                     <tr>
-                                      <td><a href="professional-view/{{list[7]}}">{{ list[9] }}</a></td>
-                                      <td>{{ list[1] }}</td>
-                                      <td> address </td>
-                                      {% if list[0] == 1 %}
+                                      <td><a href="professional-view/{{lists[i][7]}}">{{ lists[i][9] }}</a></td>
+                                      <td>{{ lists[i][1] }}</td>
+                                      <td> {{address[i]}} </td>
+                                      {% if lists[i][0] == 1 %}
                                         <td> Sim </td>
                                       {% else %}
                                         <td> Não </td>
                                       {% endif %}
-                                      <td>{{ list[2] }}</td>
+                                      <td>{{ lists[i][2] }}</td>
                                     </tr>
                                   {% endfor %}
                                 </tbody>
