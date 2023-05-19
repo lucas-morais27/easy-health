@@ -9,14 +9,11 @@ class AppointmentRepository(IAppointmentRepository):
     
     #cria um appointment com referencia ao proficional, status aberto e sem client
     def create(self, appointment):
-        try:
-            sql = "INSERT INTO appointment(client_id, professional_id, dateTime, status, description) VALUES (%s, %s, %s, %s, %s)"
-            cursor = self.con.cursor()
-            cursor.execute(sql, (appointment.client_id, appointment.professional_id, appointment.dateTime, appointment.status, appointment.description,))
-            self.con.commit()
-            return 1
-        except:
-            return 0
+        sql = "INSERT INTO appointment(client_id, professional_id, dateTime, status, description) VALUES (%s, %s, %s, %s, %s)"
+        cursor = self.con.cursor()
+        cursor.execute(sql, (appointment.client_id, appointment.professional_id, appointment.dateTime, appointment.status, appointment.description,))
+        self.con.commit()
+        
         
     def find_by_id(self, id:int):
         try:
@@ -31,24 +28,22 @@ class AppointmentRepository(IAppointmentRepository):
             return None
     
     def find_by_client_and_date(self, client_id, date):
-        try:
             cursor = self.con.cursor()
             sql = "SELECT * FROM appointment WHERE client_id=%s and dateTime=STR_TO_DATE(%s,'%m-%\d-%Y %H:%\i:%\s')"
             cursor.execute(sql, (client_id,date,))
-            appointment = cursor.fetchone()
+            result = cursor.fetchone()
+            appointment = AppointmentModel(id=result[0], client_id=result[1], professional_id=result[2],
+                                            dateTime=result[3], status=result[4], description=result[5])
             return appointment
-        except:
-            return 0
         
     def find_by_professional_and_date(self, professional_id, date):
-        try:
             cursor = self.con.cursor()
-            sql = "SELECT * FROM appointment WHERE professional_id=%s and dateTime=STR_TO_DATE(%s,'%m-%\d-%Y %H:%\i:%\s')"
-            cursor.execute(sql, (professional_id,date,))
-            appointment = cursor.fetchone()
-            return appointment
-        except:
-            return 0
+            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status, description FROM appointment WHERE dateTime=STR_TO_DATE({date},'%Y-%m-%dT%H:%i')"
+            cursor.execute(sql)
+            result = cursor.fetchone()
+            # appointment = AppointmentModel(id=result[0], client_id=result[1], professional_id=result[2],
+            #                                 dateTime=result[3], status=result[4], description=result[5])
+            return result
     
     def default(self, id):
         try:
@@ -62,14 +57,13 @@ class AppointmentRepository(IAppointmentRepository):
         
     #define um client apara um appointment ja existente
     def appoint(self, id, client_id):
-        try:
-            sql = "UPDATE appointment SET status=2 WHERE id=%s and client_id=%s"
+            sql = "UPDATE appointment SET status=2, client_id=%s WHERE id=%s "
             cursor = self.con.cursor()
             cursor.execute(sql, (id, client_id,))
             self.con.commit()
             return cursor.rowcount
-        except:
-            return 0
+        # except:
+        #     return 0
         
     def conclude(self, id):
         try:

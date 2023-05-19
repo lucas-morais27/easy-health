@@ -4,6 +4,7 @@ from repository.appointment_repository import AppointmentRepository
 from models.appointment_model import AppointmentModel
 from repository.professional_repository import ProfessionalRepository
 from repository.client_repository import ClientRepository
+import services.serviceExceptions as serviceExceptions
 
 class AppointmentService():
     
@@ -18,18 +19,24 @@ class AppointmentService():
 
     #apenas professional tem acesso
     def create(self, appointment):
+        print(f"--------------{appointment['datetime']}----------------")
+        print(str(appointment['datetime']))
         appointment_model = AppointmentModel(
-            id='',
+            id=None,
             client_id=1,
             professional_id=appointment['professional_id'],
             dateTime=appointment['datetime'],
             status=1,
             description=appointment['description']
         )
-
-        if self.apRep.create(appointment=appointment_model):
-            return 'agendamento criado'
-        return 'falha ao criar agendamento'
+        search = self.apRep.find_by_professional_and_date(professional_id=appointment_model.professional_id,
+                                                 date=appointment['datetime'])
+        if search != None:
+            raise serviceExceptions.ConflitoDeData(date=search.dateTime, description=search.description)
+        try:
+            self.apRep.create(appointment=appointment_model)
+        except serviceExceptions.DataError:
+            raise serviceExceptions.ErroNoBanco(fonte="dados da consulta")
         
     def find_by_id(self, id):
         return self.apRep.find_by_id(id=id)

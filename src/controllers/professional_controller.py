@@ -128,9 +128,11 @@ class ProfessionalController():
 					'professional_id': professional_id,
 					'description': bio
 				}
-
-				msg = appointmentService.create(appointment=appointment)
-				if msg == 'agendamento criado':
+				try:
+					appointmentService.create(appointment=appointment)
+				except serviceExceptions.ErroNoBanco as BDerr:
+					return render_template('professional-create-appointment.html', id=id,msg = BDerr.msg)
+				else:
 					return redirect('../professional/appointments')
 				
 		return render_template('professional-create-appointment.html', id=id)
