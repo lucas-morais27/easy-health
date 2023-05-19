@@ -3,6 +3,7 @@ from services.appointment_service import AppointmentService
 from models.appointment_model import AppointmentModel
 from services.client_service import ClientService
 from services.professional_service import ProfessionalService
+import services.serviceExceptions as serviceExceptions
 
 client_service = ClientService()
 professional_service = ProfessionalService()
@@ -52,7 +53,10 @@ class ClientController():
 	
 	@client_bp.route('/sign-up/client', methods=['GET', 'POST'])
 	def create_client():
-		msg = ''
+
+		if request.method == 'GET':
+			return render_template("sign-up-client.html", msg="")
+		
 		if request.method == 'POST':
 			name = request.form['name']
 			email = request.form['email']
@@ -75,11 +79,13 @@ class ClientController():
 				'complement': complement,
 				'health_plan': health_plan
 				}
-			
-			msg = client_service.create(client)
-			if msg == 'Usuário criado':
-				return redirect('/log-in')
-		return render_template("sign-up-client.html", msg=msg)
+			try:
+				client_service.create(client)
+			except serviceExceptions.EmailIndisponivel as err:
+				return render_template("sign-up-client.html", msg=err.msg)
+			except serviceExceptions.ErroNoBanco as BDerr:
+				return render_template("sign-up-client.html", msg=BDerr.msg)
+			return redirect('/log-in')
 	
 	@client_bp.route('/client/appointment-<id>', methods=['GET', 'POST'])
 	def view_appointment(id):

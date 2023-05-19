@@ -26,7 +26,8 @@ class ProfessionalController():
 	
 	@professional_bp.route('/sign-up/professional', methods=['GET', 'POST'])
 	def create_professional():
-		msg = ''
+		if request.method == 'GET':
+			return render_template("sign-up-professional.html", msg='')
 		if request.method == 'POST':
 			name = request.form['name']
 			email = request.form['email']
@@ -67,10 +68,12 @@ class ProfessionalController():
 				'complement': complement
 				}
 			
-			msg = professional_service.create(professional)
-			if msg == 'Usuário criado':
-				return redirect('/log-in')
-		return render_template("sign-up-professional.html", msg=msg)
+			try:
+				professional_service.create(professional)
+			except Exception as exception:
+				return render_template("sign-up-professional.html", msg=exception)
+			return redirect('/log-in')
+		
 	
 	@professional_bp.route('/professional/appointment-<id>', methods=['GET', 'POST'])
 	def view_appointment(id):

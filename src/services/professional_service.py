@@ -22,21 +22,22 @@ class ProfessionalService():
 			)
 		
 		if ProfessionalRepository().find_by_email(email=professional_model.email) or ClientRepository().find_by_email(email=professional_model.email):
-			return 'Já existe um usuário com esse email'
+			raise Exception('Já existe um usuário com esse email')
 		
-		if ProfessionalRepository().create(professional_model):
-			professional_aux = ProfessionalService().find_by_email(professional['email'])
-
-		if not professional_aux:
-			return 'Erro ao criar profissional'
-			
-		address_model = AddressProfessionalModel(professional_id=professional_aux[7], state=professional['state'], city=professional['city'], street=professional['street'], complement=professional['complement'])
-		address = ProfessionalService().create_address(address=address_model)
-
-		if not address:
-			return 'Endereço não criado'
+		try:
+			ProfessionalRepository().create(professional_model)
+		except NameError as err:
+			raise Exception("Erro ao criar cliente: " + str(err))
 		
-		return 'Usuário criado'
+		professional_aux = ProfessionalService().find_by_email(professional['email'])
+		
+		try:	
+			address_model = AddressProfessionalModel(professional_id=professional_aux[7], state=professional['state'], city=professional['city'], street=professional['street'], complement=professional['complement'])
+			ProfessionalService().create_address(address=address_model)
+		except:
+			ProfessionalRepository().delete(id=professional_aux[7])
+			raise Exception("Erro ao criar endereço: campo(s) com formato diferente do exigido")
+
 	
 	def authenticate(self, email, password):
 		if not ProfessionalRepository().find_by_email(email=email):
