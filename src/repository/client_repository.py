@@ -18,30 +18,26 @@ class ClientRepository(IClientRepository):
             sql = "SELECT * FROM client WHERE email=%s AND password=%s"
             cursor = self.con.cursor()
             cursor.execute(sql, (email, password))
-            usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
-            return usuario 
+            #usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
+            if cursor.fetchone() != None:
+                return True
+            return False
         except:
-            return 0
+            return False
         
     def find_by_id(self, id):
-        try:
-            cursor = self.con.cursor()
-            sql = "SELECT * FROM client WHERE id=%s"
-            cursor.execute(sql, (id,))
-            client = cursor.fetchone()
-            return client
-        except:
-            Exception("Erro no banco de dados")
+        cursor = self.con.cursor()
+        sql = "SELECT * FROM client WHERE id=%s"
+        cursor.execute(sql, (id,))
+        client = cursor.fetchone()
+        return client
         
     def find_by_email(self, email):
-        try:
-            cursor = self.con.cursor()
-            sql = "SELECT * FROM client WHERE email=%s"
-            cursor.execute(sql, (email,))
-            funcionario = cursor.fetchone()
-            return funcionario
-        except:
-            return 0
+        cursor = self.con.cursor()
+        sql = "SELECT * FROM client WHERE email=%s"
+        cursor.execute(sql, (email,))
+        client = cursor.fetchone()
+        return client
         
     def disable(self, id):
         try:
@@ -54,36 +50,26 @@ class ClientRepository(IClientRepository):
             return 0
         
     def get_client(self, email):
-        try:
-            cursor = self.con.cursor()
-            sql = "SELECT * FROM client WHERE email=%s"
-            cursor.execute(sql, (email,))
-            funcionario = cursor.fetchone()
-            return funcionario
-        except:
-            return 0
-        
+        cursor = self.con.cursor()
+        sql = "SELECT * FROM client WHERE email=%s"
+        cursor.execute(sql, (email,))
+        client = cursor.fetchone()
+        return client
+
 
     def create_address(self, address):
-        try:
-            sql = "INSERT INTO client_address(client_id, state, city, street, complement) VALUES (%s, %s, %s, %s, %s)"
-            cursor = self.con.cursor()
-            cursor.execute(sql, (address.client_id, address.state, address.city, address.street, address.complement,))
-            self.con.commit()
-            
-        except NameError as err:
-            raise err
+        sql = "INSERT INTO client_address(client_id, state, city, street, complement) VALUES (%s, %s, %s, %s, %s)"
+        cursor = self.con.cursor()
+        cursor.execute(sql, (address.client_id, address.state, address.city, address.street, address.complement,))
+        self.con.commit()
         
         
     def find_address_by_client_id(self, id):
-        try:
-            sql = "SELECT * FROM client_adress WHERE client_id=%s"
-            cursor = self.con.cursor()
-            cursor.execute(sql, (id,))
-            address = cursor.fetchone()
-            return address
-        except:
-            return 0
+        sql = "SELECT * FROM client_adress WHERE client_id=%s"
+        cursor = self.con.cursor()
+        cursor.execute(sql, (id,))
+        address = cursor.fetchone()
+        return address
     
         
     def create_plan(self, plan):

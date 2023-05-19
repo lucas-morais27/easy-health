@@ -17,9 +17,9 @@ class IProfessionalRepository(ABC):
     def find_by_id(self, id):
         pass
     
-    @abstractmethod
-    def get_professional(self, email):
-        pass
+    # @abstractmethod
+    # def get_professional(self, email):
+    #     pass
     
     @abstractmethod
     def list(self, id=None):

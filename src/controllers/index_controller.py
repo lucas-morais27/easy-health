@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, render_template, request, session
 from services.client_service import ClientService
 from services.professional_service import ProfessionalService
+import services.serviceExceptions as serviceExeptions
 
 index_bp = Blueprint('index', __name__)
 
@@ -60,8 +61,33 @@ class IndexController:
 			email = request.form['email']
 			password = request.form['password']
 			
-			client_authenticate = ClientService().authenticate(email=email, password=password)
-			if client_authenticate == 'ok':
+			try:
+				ClientService().authenticate(email=email, password=password)
+			except serviceExeptions.SenhaIncorreta as err:
+				return render_template('log-in.html', msg=err.msg)
+			except serviceExeptions.UsuarioDesativado as err:
+				return render_template('log-in.html', msg=err.msg)
+			
+			#se o email não existir para o client sera testa para o profissional
+			except serviceExeptions.EmailInexistente:
+				try:
+					ProfessionalService().authenticate(email=email, password=password)
+				except serviceExeptions.SenhaIncorreta as err:
+					return render_template('log-in.html', msg=err.msg)
+				except serviceExeptions.UsuarioDesativado as err:
+					return render_template('log-in.html', msg=err.msg)
+				except serviceExeptions.EmailInexistente as err:
+					return render_template('log-in.html', msg=err.msg)
+				else:
+					professional = ProfessionalService().find_by_email(email=email)
+					session['logado'] = {
+						'id': professional[7],
+						'nome': professional[9],
+						'tipo': 1
+					}
+				return redirect('home-professional')
+
+			else:
 				client = ClientService().find_by_email(email=email)
 				session['logado'] = {
 					'id': client[1],
@@ -70,15 +96,7 @@ class IndexController:
 				}
 				return redirect('home-client')
 			
-			professional_authenticatel = ProfessionalService().authenticate(email=email, password=password)
-			if professional_authenticatel == 'ok' :
-				professional = ProfessionalService().find_by_email(email=email)
-				session['logado'] = {
-					'id': professional[7],
-					'nome': professional[9],
-					'tipo': 1
-				}
-				return redirect('home-professional')
+			
 
 		return render_template('log-in.html', msg=msg)
 	
