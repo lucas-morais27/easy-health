@@ -21,9 +21,11 @@ class ProfessionalRepository(IProfessionalRepository):
             sql = "SELECT * FROM professional WHERE email=%s AND password=%s"
             cursor = self.con.cursor()
             cursor.execute(sql, (email, password))
-            return 1
+            if cursor.fetchone() != None:
+                return True
+            return False
         except:
-            return 0
+            return False
         
     def find_by_email(self, email):
         try:
@@ -72,14 +74,10 @@ class ProfessionalRepository(IProfessionalRepository):
             return None
         
     def create_address(self, address):
-        try:
             sql = "INSERT INTO professional_address(professional_id, state, city, street, complement) VALUES (%s, %s, %s, %s, %s)"
             cursor = self.con.cursor()
             cursor.execute(sql, (address.professional_id, address.state, address.city, address.street, address.complement,))
             self.con.commit()
-            return 1
-        except:
-            return 0
         
     def get_address_by_id(self, id):
         try:

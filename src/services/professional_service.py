@@ -1,9 +1,15 @@
+from MySQLdb import DataError
 from models.address_professional_model import AddressProfessionalModel
 from models.professional_model import ProfessionalModel
 from repository.client_repository import ClientRepository
 from repository.professional_repository import ProfessionalRepository
+import services.serviceExceptions as serviceExceptions
 
 class ProfessionalService():
+
+	def __init__(self) -> None:
+		self.profRep = ProfessionalRepository()
+		self.clientRep = ClientRepository()
 
 	def create(self, professional):
 		
@@ -21,33 +27,30 @@ class ProfessionalService():
 			phone_number=int(professional['phone_number'])
 			)
 		
-		if ProfessionalRepository().find_by_email(email=professional_model.email) or ClientRepository().find_by_email(email=professional_model.email):
-			raise Exception('Já existe um usuário com esse email')
+		if self.profRep.find_by_email(email=professional_model.email) or self.clientRep.find_by_email(email=professional_model.email):
+			raise serviceExceptions.EmailIndisponivel
 		
 		try:
-			ProfessionalRepository().create(professional_model)
-		except NameError as err:
-			raise Exception("Erro ao criar cliente: " + str(err))
+			self.clientRep.create(professional_model)
+		except DataError:
+			raise serviceExceptions.ErroNoBanco(fonte="dados do profissional")
 		
-		professional_aux = ProfessionalService().find_by_email(professional['email'])
-		
+		professional_aux = self.find_by_email(professional['email'])
+		address_model = AddressProfessionalModel(professional_id=professional_aux[7], state=professional['state'], city=professional['city'], street=professional['street'], complement=professional['complement'])
 		try:	
-			address_model = AddressProfessionalModel(professional_id=professional_aux[7], state=professional['state'], city=professional['city'], street=professional['street'], complement=professional['complement'])
-			ProfessionalService().create_address(address=address_model)
-		except:
-			ProfessionalRepository().delete(id=professional_aux[7])
-			raise Exception("Erro ao criar endereço: campo(s) com formato diferente do exigido")
+			self.create_address(address=address_model)
+		except DataError:
+			self.profRep.delete(id=professional_aux[7])
+			raise serviceExceptions.ErroNoBanco(fonte="dados do endereço")
 
 	
 	def authenticate(self, email, password):
 		if not ProfessionalRepository().find_by_email(email=email):
-			return 'Email inexistente'
-		if not ProfessionalRepository().get_professional(email=email)[9]:
-			return 'Usuário desativo'
-		elif ProfessionalRepository().authenticate(email=email, password=password):
-			return 'ok'
-		else:
-			return 'Senha incorreta'
+			raise serviceExceptions.EmailInexistente
+		elif not ProfessionalRepository().get_professional(email=email)[9]:
+			raise serviceExceptions.UsuarioDesativado
+		elif not ProfessionalRepository().authenticate(email=email, password=password):
+			raise serviceExceptions.SenhaIncorreta
 	
 	def find_by_email(self, email):
 		try:
@@ -64,12 +67,8 @@ class ProfessionalService():
 		return professional
 	
 	def create_address(self, address):
-		try:
-			address_aux = ProfessionalRepository().create_address(address=address)
-		except NameError as err:
-			raise err
+		self.profRep.create_address(address=address)
 		
-		return 'Endereço criado'
 	
 	def get_address_by_id(self, id):
 		try:

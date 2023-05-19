@@ -18,10 +18,12 @@ class ClientRepository(IClientRepository):
             sql = "SELECT * FROM client WHERE email=%s AND password=%s"
             cursor = self.con.cursor()
             cursor.execute(sql, (email, password))
-            usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
-            return usuario 
+            #usuario = cursor.fetchone() # lastrowid, fetchone, fetchall
+            if cursor.fetchone() != None:
+                return True
+            return False
         except:
-            return 0
+            return False
         
     def find_by_id(self, id):
         try:
@@ -65,14 +67,10 @@ class ClientRepository(IClientRepository):
         
 
     def create_address(self, address):
-        try:
             sql = "INSERT INTO client_address(client_id, state, city, street, complement) VALUES (%s, %s, %s, %s, %s)"
             cursor = self.con.cursor()
             cursor.execute(sql, (address.client_id, address.state, address.city, address.street, address.complement,))
             self.con.commit()
-            
-        except NameError as err:
-            raise err
         
         
     def find_address_by_client_id(self, id):

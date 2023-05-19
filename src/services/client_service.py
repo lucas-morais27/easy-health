@@ -29,11 +29,11 @@ class ClientService():
 		except DataError:
 			raise serviceExceptions.ErroNoBanco(fonte="dados de cliente")
 		
-		client_aux = ClientService().find_by_email(client['email'])
+		client_aux = self.find_by_email(client['email'])
 		address_model = AddressClientModel(client_id=client_aux[1], state=client['state'], city=client['city'], street=client['street'], complement=client['complement'])
 		
 		try:
-			ClientService().create_address(address=address_model)
+			self.create_address(address=address_model)
 		except  DataError:
 			self.clientRep.delete(id=client_aux[1])
 			raise serviceExceptions.ErroNoBanco(fonte="dados do endereço")
@@ -42,12 +42,10 @@ class ClientService():
 	def authenticate(self, email, password):
 		if not self.clientRep.find_by_email(email=email):
 			raise serviceExceptions.EmailInexistente
-		if not self.clientRep.get_client(email=email)[2]:
+		elif not self.clientRep.get_client(email=email)[2]:
 			raise serviceExceptions.UsuarioDesativado
-		elif self.clientRep.authenticate(email=email, password=password):
-			return 'ok'
-		else:
-			return 'Senha incorreta'
+		elif not self.clientRep.authenticate(email=email, password=password):
+			raise serviceExceptions.SenhaIncorreta
 
 
 	def find_by_id(self, id):
@@ -69,10 +67,7 @@ class ClientService():
 		return client
 	
 	def create_address(self, address):
-		try:
 			self.clientRep.create_address(address=address)
-		except NameError as err:
-			raise err
 		
 		#return 'Endereço criado'
 	
