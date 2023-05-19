@@ -1,4 +1,5 @@
 from models import db
+import MySQLdb
 from repository.professional_repository_interface import IProfessionalRepository
 
 class ProfessionalRepository(IProfessionalRepository):
@@ -12,9 +13,8 @@ class ProfessionalRepository(IProfessionalRepository):
             cursor = self.con.cursor()
             cursor.execute(sql, (professional.provides_home_service, professional.specialty, professional.council_registration, professional.twitter, professional.insta, professional.linkedin, professional.bio, 1, professional.name, professional.email, professional.password, professional.phone_number,))
             self.con.commit()
-            return 1
         except:
-            return 0
+            raise Exception("Erro no banco de dados")
         
     def authenticate(self, email, password):
         try:
@@ -43,7 +43,7 @@ class ProfessionalRepository(IProfessionalRepository):
             professional = cursor.fetchone()
             return professional
         except:
-            return 0
+            Exception("Erro no banco de dados")
         
     def get_professional(self, email):
         try:
@@ -130,3 +130,12 @@ class ProfessionalRepository(IProfessionalRepository):
             return cursor.rowcount
         except:
             return 0
+        
+    def delete(self, id):
+        try:
+            sql = "DELETE FROM professional WHERE id=%s"
+            cursor = self.con.cursor()
+            cursor.execute(sql, (id,))
+            self.con.commit()
+        except:
+            raise Exception("Erro no banco de dados")

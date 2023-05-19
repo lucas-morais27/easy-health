@@ -30,8 +30,8 @@ class ClientRepository(IClientRepository):
             cursor.execute(sql, (id,))
             client = cursor.fetchone()
             return client
-        except NameError:
-            raise
+        except:
+            Exception("Erro no banco de dados")
         
     def find_by_email(self, email):
         try:
@@ -102,6 +102,5 @@ class ClientRepository(IClientRepository):
             cursor = self.con.cursor()
             cursor.execute(sql, (id,))
             self.con.commit()
-            #return cursor.rowcount
-        except NameError as err:
-            raise err
+        except:
+            raise Exception("Erro no banco de dados")

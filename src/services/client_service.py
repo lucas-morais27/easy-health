@@ -2,8 +2,14 @@ from models.address_client_model import AddressClientModel
 from models.client_model import ClientModel
 from repository.client_repository import ClientRepository
 from repository.professional_repository import ProfessionalRepository
+import services.serviceExceptions as serviceExceptions
+from MySQLdb._exceptions import DataError
 
 class ClientService():
+
+	def __init__(self) -> None:
+		self.profRep = ProfessionalRepository()
+		self.clientRep = ClientRepository()
 
 	def create(self, client):
 		client_model = ClientModel(
@@ -15,30 +21,30 @@ class ClientService():
 			address=''
 			)
 		
-		if ClientRepository().find_by_email(email=client_model.email) or ProfessionalRepository().find_by_email(email=client_model.email):
-			raise Exception('Já existe um usuário com esse email')
+		if self.clientRep.find_by_email(email=client_model.email) or self.profRep.find_by_email(email=client_model.email):
+			raise serviceExceptions.EmailIndisponivel
 		
 		try:
-			ClientRepository().create(client_model)
-		except NameError as err:
-			raise "Erro ao criar cliente: " + err
+			self.clientRep.create(client_model)
+		except DataError:
+			raise serviceExceptions.ErroNoBanco(fonte="dados de cliente")
 		
 		client_aux = ClientService().find_by_email(client['email'])
-
+		address_model = AddressClientModel(client_id=client_aux[1], state=client['state'], city=client['city'], street=client['street'], complement=client['complement'])
+		
 		try:
-			address_model = AddressClientModel(client_id=client_aux[1], state=client['state'], city=client['city'], street=client['street'], complement=client['complement'])
 			ClientService().create_address(address=address_model)
-		except:
-			ClientRepository().delete(id=client_aux[1])
-			raise Exception("Erro ao criar endereço: campo(s) com formato diferente do exigido")
+		except  DataError:
+			self.clientRep.delete(id=client_aux[1])
+			raise serviceExceptions.ErroNoBanco(fonte="dados do endereço")
 
 	
 	def authenticate(self, email, password):
-		if not ClientRepository().find_by_email(email=email):
-			return 'Email inexistente'
-		if not ClientRepository().get_client(email=email)[2]:
-			return 'Usuário desativo'
-		elif ClientRepository().authenticate(email=email, password=password):
+		if not self.clientRep.find_by_email(email=email):
+			raise serviceExceptions.EmailInexistente
+		if not self.clientRep.get_client(email=email)[2]:
+			raise serviceExceptions.UsuarioDesativado
+		elif self.clientRep.authenticate(email=email, password=password):
 			return 'ok'
 		else:
 			return 'Senha incorreta'
@@ -46,7 +52,7 @@ class ClientService():
 
 	def find_by_id(self, id):
 		try:
-			client = ClientRepository().find_by_id(id)
+			client = self.clientRep.find_by_id(id)
 			
 		except NameError as err:
 			raise err
@@ -55,7 +61,7 @@ class ClientService():
 	
 	def find_by_email(self, email):
 		try:
-			client = ClientRepository().find_by_email(email)
+			client = self.clientRep.find_by_email(email)
 			
 		except NameError as err:
 			raise err
@@ -64,7 +70,7 @@ class ClientService():
 	
 	def create_address(self, address):
 		try:
-			ClientRepository().create_address(address=address)
+			self.clientRep.create_address(address=address)
 		except NameError as err:
 			raise err
 		
@@ -72,7 +78,7 @@ class ClientService():
 	
 	def disable(self, id):
 		try:
-			ClientRepository().disable(id)
+			self.clientRep.disable(id)
 		except NameError as err:
 			raise err
 		

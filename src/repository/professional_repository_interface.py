@@ -48,3 +48,7 @@ class IProfessionalRepository(ABC):
     @abstractmethod
     def disable(self, id):
         pass
+
+    @abstractmethod
+    def delete(self, id):
+        pass
