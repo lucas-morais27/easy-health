@@ -49,32 +49,18 @@ class ClientService():
 
 
 	def find_by_id(self, id):
-		try:
-			client = self.clientRep.find_by_id(id)
-			
-		except NameError as err:
-			raise err
-		
+		client = self.clientRep.find_by_id(id)
 		return client
 	
 	def find_by_email(self, email):
-		try:
-			client = self.clientRep.find_by_email(email)
-			
-		except NameError as err:
-			raise err
-		
+		client = self.clientRep.find_by_email(email)
 		return client
 	
 	def create_address(self, address):
-			self.clientRep.create_address(address=address)
+		self.clientRep.create_address(address=address)
 		
 		#return 'Endereço criado'
 	
 	def disable(self, id):
-		try:
-			self.clientRep.disable(id)
-		except NameError as err:
-			raise err
-		
+		self.clientRep.disable(id)
 		return 'disable'

@@ -1,6 +1,5 @@
 from MySQLdb._exceptions import DataError
-class ServiceExeption(Exception):
-    pass
+
 
 class EmailIndisponivel(Exception):
     def __init__(self) -> None:
@@ -37,3 +36,8 @@ class ErroNoBanco(DataError):
         super().__init__(f"Erro de dado no banco MySQL, fonte do erro: {fonte},\
                           um ou mais campos podem estar com mais caracteres que o permitido \
                          ou com caracteres invalidos para o campo")
+        
+class SemRetorno(TypeError):
+    def __init__(self, obj, identificador, valor) -> None:
+        self.msg=f"Não Existe nenhum {obj} com {identificador} igual a {valor}"
+        super().__init__(self.msg)

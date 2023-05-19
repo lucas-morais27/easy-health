@@ -31,7 +31,7 @@ class ProfessionalService():
 			raise serviceExceptions.EmailIndisponivel
 		
 		try:
-			self.clientRep.create(professional_model)
+			self.profRep.create(professional_model)
 		except DataError:
 			raise serviceExceptions.ErroNoBanco(fonte="dados do profissional")
 		
@@ -47,23 +47,17 @@ class ProfessionalService():
 	def authenticate(self, email, password):
 		if not ProfessionalRepository().find_by_email(email=email):
 			raise serviceExceptions.EmailInexistente
-		elif not ProfessionalRepository().get_professional(email=email)[9]:
+		elif not ProfessionalRepository().find_by_email(email=email)[9]:
 			raise serviceExceptions.UsuarioDesativado
 		elif not ProfessionalRepository().authenticate(email=email, password=password):
 			raise serviceExceptions.SenhaIncorreta
 	
 	def find_by_email(self, email):
-		try:
-			professional = ProfessionalRepository().find_by_email(email=email)
-		except NameError as err:
-			raise err
+		professional = ProfessionalRepository().find_by_email(email=email)
 		return professional
 	
 	def find_by_id(self,id):
-		try:
-			professional = ProfessionalRepository().find_by_id(id=id)
-		except NameError as err:
-			raise err
+		professional = ProfessionalRepository().find_by_id(id=id)
 		return professional
 	
 	def create_address(self, address):
@@ -71,26 +65,17 @@ class ProfessionalService():
 		
 	
 	def get_address_by_id(self, id):
-		try:
-			address_aux = ProfessionalRepository().get_address_by_id(id=id)
-			address = ""
-			address = address_aux[4]+ ", "+ address_aux[5]+ ", "+ address_aux[3]+ " - "+ address_aux[2]  
-		except NameError as err:
-			raise err
+
+		address_aux = ProfessionalRepository().get_address_by_id(id=id)
+		address = ""
+		address = address_aux[4]+ ", "+ address_aux[5]+ ", "+ address_aux[3]+ " - "+ address_aux[2]  
 		
 		return address
 	
 	def disable(self, id):
-		try:
-			ProfessionalRepository().disable(id)
-		except NameError as err:
-			raise err
-		
+		ProfessionalRepository().disable(id)
 		return 'disable'
 	
-	def list(self,id=None):
-		try:
-			professionals = ProfessionalRepository().list()
-		except NameError as err:
-			raise err
+	def list(self):
+		professionals = ProfessionalRepository().list()
 		return professionals

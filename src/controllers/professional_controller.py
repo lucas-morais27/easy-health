@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, request, session
 from services.professional_service import ProfessionalService
 from services.appointment_service import AppointmentService
 from services.client_service import ClientService
+import services.serviceExceptions as serviceExceptions
 
 professional_service = ProfessionalService()
 client_service = ClientService()
@@ -10,15 +11,16 @@ appointmentService = AppointmentService()
 
 class ProfessionalController():
 
+
 	@professional_bp.route('/professional-profile', methods=['GET', 'POST'])
 	def professional_profile():
 		id = session['logado']['id']
-		professional = ProfessionalService().find_by_id(id)
+		professional = professional_service.find_by_id(id)
 
 		if request.method == "POST":
 			disable = request.form['disable']
 			if disable:
-				professional_disable = ProfessionalService().disable(id)
+				professional_disable = professional_service.disable(id)
 				if professional_disable:
 					return redirect('index')
 				
@@ -70,8 +72,11 @@ class ProfessionalController():
 			
 			try:
 				professional_service.create(professional)
-			except Exception as exception:
-				return render_template("sign-up-professional.html", msg=exception)
+			except serviceExceptions.EmailIndisponivel as err:
+				return render_template("sign-up-professional.html", msg=err.msg)
+			except serviceExceptions.ErroNoBanco as BDerr:
+				return render_template("sign-up-professional.html", msg=BDerr.msg)
+			
 			return redirect('/log-in')
 		
 	
