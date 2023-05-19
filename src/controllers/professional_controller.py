@@ -80,13 +80,18 @@ class ProfessionalController():
 		client = client_service.find_by_id(appointment.client_id)
 
 		if request.method == 'POST':
+
 			status = request.form['status']
+			
 			if status == 'agendado':
 				appointmentService.appoint(id=id, client_id=appointment.client_id)
 			elif status == 'concluido':
 				appointmentService.conclude(id=id)
 			elif status == 'cancelado':
 				appointmentService.cancel(id=id)
+			elif status == 'deletado':
+				if appointmentService.delete(id=id) == 'harario de consulta excluido':
+					return redirect('../professional/appointments')
 			else:
 				appointmentService.default(id=id)
 
@@ -100,3 +105,24 @@ class ProfessionalController():
 		tipo = session['logado']['tipo']
 		appointments = appointmentService.list_by_professional(id)
 		return render_template('appointments-view-professional.html', list=appointments, id=id, tipo=tipo)
+	
+	@professional_bp.route('/create-appointment', methods=['GET', 'POST'])
+	def create_appointment():
+		msg = ''
+		professional_id = session['logado']['id']
+		if request.method == "POST":
+			disable = request.form['disable']
+			bio = request.form['bio']
+			datetime = request.form['time']
+			if disable:
+				appointment = {
+					'datetime': datetime,
+					'professional_id': professional_id,
+					'description': bio
+				}
+
+				msg = appointmentService.create(appointment=appointment)
+				if msg == 'agendamento criado':
+					return redirect('../professional/appointments')
+				
+		return render_template('professional-create-appointment.html', id=id)

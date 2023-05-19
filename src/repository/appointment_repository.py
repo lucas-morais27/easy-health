@@ -135,7 +135,7 @@ class AppointmentRepository(IAppointmentRepository):
     def list_by_client(self, client_id):
         try:
             cursor = self.con.cursor()
-            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status, description FROM appointment WHERE client_id={client_id} ORDER BY dateTime asc"
+            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status, description FROM appointment WHERE client_id={client_id} AND status!='aberto' ORDER BY dateTime asc"
             cursor.execute(sql)
             results = cursor.fetchall()
             appointments = []

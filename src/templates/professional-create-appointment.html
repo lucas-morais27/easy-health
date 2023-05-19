@@ -18,7 +18,7 @@
 	<meta property="og:type" content="article" />
 
     <!-- Website Title -->
-    <title>Profile - Easy Health</title>
+    <title>Create Appointment - Easy Health</title>
     
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
@@ -64,10 +64,10 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link page-scroll" href="../client-profile">Seu Perfil<span class="sr-only">(current)</span></a>
+                        <a class="nav-link page-scroll" href="../professional-profile">Seu Perfil<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link page-scroll" href="../client/appointments">Minhas Consultas<span class="sr-only">(current)</span></a>
+                        <a class="nav-link page-scroll" href="../professional/appointments">Minhas Consultas<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link page-scroll" href="../log-out"></i>Sair <i class="fas fa-angle-double-right"></i><span class="sr-only">(current)</span></a>
@@ -82,39 +82,37 @@
     <!-- Header -->
     <header id="header" class="ex-2-header">
         <div class="container">
-            <h1>{{ professional[9] }} - Reg. Nº {{ professional[2] }}</h1>
-            <h2> {{ professional[1] }}</h2>
-            <div style="background-color: rgb(95, 11, 230); border-radius: 10px;" class="container">
-                <br>
-                <h3>Horários Disponíveis</h3>
-                <br>
-                <div class="row">
-                    {% for appointment in list %}
-                        {% if appointment[2] == 'aberto' %}
-                            <div class="col">
-                                <div class="form-container">
-                                    <form action="" method="post">
-                                        <h4>Data/Horário</h4>
-                                        {{ appointment[1]}}
-                                        <h4>Observação</h4>
-                                        {{ appointment[5]}}
-                                        <div class="form-group">
-                                            <h4>Marcar horário</h4>
-                                            <input type="checkbox" name="check" id="lcheck" value="y" >
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-                                        <a href="../professional-view/{{ professional[7] }}-{{ appointment[4] }}">
-                                            <i>
-                                                <button type="submit">AGENDAR</button>
-                                            </i>
-                                        </a>
-                                    </form>
-                                </div>
-                            </div> <!-- end of col -->    
-                        {% endif %}
-                    {% endfor %}
-                </div> <!-- end of row -->
-            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Agendar Consulta</h1><br>
+                    <!-- Sign Up Form -->
+                    <div class="form-container">
+                        <form action="" method="post">
+                            <h5 for="time">Selecione um horário:</h5>
+                            <input type="datetime-local" id="time"
+                                name="time" value="2023-05-01T08:00">
+                            <div class="form-group">
+                                <br>
+                                <h5>Observação</h5>
+                                <input type="text" name="bio" class="form-control-input" id="lbio" required>
+                            </div>
+                            <div class="form-group">
+                                <h6>Deseja marcar a consulta? </h6>
+                                <input type="checkbox" name="disable" id="ldisable" value="y" >
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control-submit-button">AGENDAR</button>
+                            </div>
+                            <div class="form-message">
+                                <div id="lmsgSubmit" class="h3 text-center hidden"></div>
+                            </div>
+                        </form>
+                    </div> <!-- end of form container -->
+                    <!-- end of sign up form -->
+
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
         </div> <!-- end of container -->
     </header> <!-- end of ex-header -->
     <!-- end of header -->

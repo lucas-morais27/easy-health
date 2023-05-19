@@ -1,8 +1,10 @@
 import datetime
+from random import randint
 from repository.appointment_repository import AppointmentRepository
 from models.appointment_model import AppointmentModel
 from repository.professional_repository import ProfessionalRepository
 from repository.client_repository import ClientRepository
+
 class AppointmentService():
     
     def __init__(self) -> None:
@@ -18,12 +20,13 @@ class AppointmentService():
     def create(self, appointment):
         appointment_model = AppointmentModel(
             id='',
-            client_id=appointment['client_id'],
+            client_id=1,
             professional_id=appointment['professional_id'],
             dateTime=appointment['datetime'],
             status=1,
             description=appointment['description']
         )
+
         if self.apRep.create(appointment=appointment_model):
             return 'agendamento criado'
         return 'falha ao criar agendamento'
@@ -81,7 +84,7 @@ class AppointmentService():
     def delete(self,id):
         if self.find_by_id(id=id) == 0:
             return "horario de consulta não existe"
-        if self.delete(id=id):
+        if self.apRep.delete(id=id):
             return "harario de consulta excluido"
         return "Não foi possivel excluir o horario de consulta, erro interno"
     
@@ -97,7 +100,8 @@ class AppointmentService():
                     appointments[i].dateTime,
                     appointments[i].status,
                     appointments[i].professional_id,
-                    appointments[i].get_id()
+                    appointments[i].get_id(),
+                    appointments[i].description
                 ]
                 lista.append(item)
         return lista
@@ -120,7 +124,8 @@ class AppointmentService():
                     appointments[i].dateTime,
                     appointments[i].status,
                     appointments[i].professional_id,
-                    appointments[i].get_id()
+                    appointments[i].get_id(),
+                    appointments[i].description
                 ]
                 lista.append(item)
         return lista

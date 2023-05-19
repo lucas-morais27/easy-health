@@ -36,28 +36,19 @@ class ClientController():
 			address.append(auxiliar)
 		return render_template('list-professional.html', lists=lists, id=id, address=address, len=len(lists))
 	
-	@client_bp.route('/professional-view/<id>', methods=['GET', 'POST'])
-	def professional_view(id):
-		msg = ''
+	@client_bp.route('/professional-view/<id>-<appoint>', methods=['GET', 'POST'])
+	def professional_view(id, appoint):
 		professional = professional_service.find_by_id(id)
+		appointments = appointmentService.list_by_professional(professional_id=professional[7])
 		client_id = session['logado']['id']
-		if request.method == "POST":
-			disable = request.form['disable']
-			bio = request.form['bio']
-			datetime = request.form['time']
-			if disable:
-				appointment = {
-					'datetime': datetime,
-					'client_id': client_id,
-					'professional_id': professional[7],
-					'description': bio
-				}
+		if request.method == 'POST':
+			check = request.form['check']
+			if check:
+				if appointmentService.appoint(id=appoint, client_id=client_id) == 'consulta agendada com sucesso no horario':
+					return redirect('../client/appointments')
 
-				msg = appointmentService.create(appointment=appointment)
-				if msg == 'agendamento criado':
-					return redirect('../home-client')
 				
-		return render_template('professional-view.html', professional=professional, nome=professional[9], id=id)
+		return render_template('professional-view.html', professional=professional, list=appointments, id=id)
 	
 	@client_bp.route('/sign-up/client', methods=['GET', 'POST'])
 	def create_client():
