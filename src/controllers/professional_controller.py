@@ -98,7 +98,7 @@ class ProfessionalController():
 			elif status == 'cancelado':
 				appointmentService.cancel(id=id)
 			elif status == 'deletado':
-				if appointmentService.delete(id=id) == 'harario de consulta excluido':
+				if appointmentService.delete(id=id) == 'horario de consulta excluido':
 					return redirect('../professional/appointments')
 			else:
 				appointmentService.default(id=id)

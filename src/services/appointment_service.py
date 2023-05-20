@@ -97,7 +97,7 @@ class AppointmentService():
         if self.find_by_id(id=id) == 0:
             return "horario de consulta não existe"
         if self.apRep.delete(id=id):
-            return "harario de consulta excluido"
+            return "horario de consulta excluido"
         return "Não foi possivel excluir o horario de consulta, erro interno"
     
     def list_by_professional(self, professional_id):

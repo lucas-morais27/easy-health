@@ -80,7 +80,7 @@ class AppointmentRepository(IAppointmentRepository):
         
     def cancel(self, id):
         try:
-            sql = "UPDATE appointment SET status=0 WHERE id=%s"
+            sql = "UPDATE appointment SET status=1, client_id=1 WHERE id=%s"
             cursor = self.con.cursor()
             cursor.execute(sql, (id,))
             self.con.commit()
