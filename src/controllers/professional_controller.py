@@ -132,6 +132,8 @@ class ProfessionalController():
 					appointmentService.create(appointment=appointment)
 				except serviceExceptions.ErroNoBanco as BDerr:
 					return render_template('professional-create-appointment.html', id=id,msg = BDerr.msg)
+				except serviceExceptions.ConflitoDeData as DateErr:
+					return render_template('professional-create-appointment.html', id=id,msg = DateErr.msg)
 				else:
 					return redirect('../professional/appointments')
 				

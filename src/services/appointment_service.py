@@ -1,10 +1,12 @@
 import datetime
-from random import randint
+
+# from datetime import strptime
 from repository.appointment_repository import AppointmentRepository
 from models.appointment_model import AppointmentModel
 from repository.professional_repository import ProfessionalRepository
 from repository.client_repository import ClientRepository
 import services.serviceExceptions as serviceExceptions
+import datetime
 
 class AppointmentService():
     
@@ -29,8 +31,11 @@ class AppointmentService():
             status=1,
             description=appointment['description']
         )
-        search = self.apRep.find_by_professional_and_date(professional_id=appointment_model.professional_id,
-                                                 date=appointment['datetime'])
+        databruta = datetime.datetime.strptime(appointment['datetime'], f"%Y-%m-%dT%H:%M")
+        dataformatada = databruta.strftime(f'%d/%m/%Y - %H:%M')
+        print(dataformatada)
+        search = self.check_date_professional(professional_id=appointment_model.professional_id,
+                                                 date=dataformatada)
         if search != None:
             raise serviceExceptions.ConflitoDeData(date=search.dateTime, description=search.description)
         try:
@@ -47,7 +52,7 @@ class AppointmentService():
         appointment = self.apRep.find_by_id(id=id)
         if appointment == None:
             return "horario de consulta não existe"
-        if self.apRep.find_by_client_and_date(client_id=client_id,date=appointment.dateTime):
+        if self.check_date_client(client_id=client_id,date=appointment.dateTime):
              return "você ja possui uma consulta com esse mesmo horario e data"
         if appointment.status == 2:
             return "horario de consulta ja está agendada por outro cliente"
@@ -136,3 +141,15 @@ class AppointmentService():
                 ]
                 lista.append(item)
         return lista
+    
+    def check_date_client(self, client_id, date):
+        list = self.list_by_client(client_id=client_id)
+        for appointment in list:
+            if appointment[1] == date:
+                raise serviceExceptions.ConflitoDeData(date=date,description=appointment[5])
+            
+    def check_date_professional(self,professional_id,date):
+        list = self.list_by_professional(professional_id=professional_id)
+        for appointment in list:
+            if appointment[1] == date:
+                raise serviceExceptions.ConflitoDeData(date=date,description=appointment[5])

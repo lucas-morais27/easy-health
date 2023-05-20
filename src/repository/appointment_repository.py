@@ -18,8 +18,8 @@ class AppointmentRepository(IAppointmentRepository):
     def find_by_id(self, id:int):
         try:
             cursor = self.con.cursor()
-            sql = "SELECT * FROM appointment WHERE id=%s"
-            cursor.execute(sql, (id,))
+            sql = f"SELECT id, client_id, professional_id, DATE_FORMAT(dateTime,'%d/%m/%Y - %H:%i'), status, description FROM appointment WHERE id={id}"
+            cursor.execute(sql)
             result = cursor.fetchone()
             appointment = AppointmentModel(id=result[0], client_id=result[1], professional_id=result[2],
                                             dateTime=result[3], status=result[4], description=result[5])
@@ -28,6 +28,7 @@ class AppointmentRepository(IAppointmentRepository):
             return None
     
     def find_by_client_and_date(self, client_id, date):
+        try:
             cursor = self.con.cursor()
             sql = "SELECT * FROM appointment WHERE client_id=%s and dateTime=STR_TO_DATE(%s,'%m-%\d-%Y %H:%\i:%\s')"
             cursor.execute(sql, (client_id,date,))
@@ -35,6 +36,8 @@ class AppointmentRepository(IAppointmentRepository):
             appointment = AppointmentModel(id=result[0], client_id=result[1], professional_id=result[2],
                                             dateTime=result[3], status=result[4], description=result[5])
             return appointment
+        except:
+            return 0
         
     def find_by_professional_and_date(self, professional_id, date):
             cursor = self.con.cursor()
@@ -57,11 +60,11 @@ class AppointmentRepository(IAppointmentRepository):
         
     #define um client apara um appointment ja existente
     def appoint(self, id, client_id):
-            sql = "UPDATE appointment SET status=2, client_id=%s WHERE id=%s "
-            cursor = self.con.cursor()
-            cursor.execute(sql, (id, client_id,))
-            self.con.commit()
-            return cursor.rowcount
+        sql = "UPDATE appointment SET status=2, client_id=%s WHERE id=%s "
+        cursor = self.con.cursor()
+        cursor.execute(sql, (client_id, id))
+        self.con.commit()
+        return cursor.rowcount
         # except:
         #     return 0
         

@@ -45,7 +45,11 @@ class ClientController():
 		if request.method == 'POST':
 			check = request.form['check']
 			if check:
-				if appointmentService.appoint(id=appoint, client_id=client_id) == 'consulta agendada com sucesso no horario':
+				try:
+					appointmentService.appoint(id=appoint, client_id=client_id)
+				except serviceExceptions.ConflitoDeData as DateErr:
+					return render_template('professional-view.html', professional=professional, list=appointments, id=id, msg=DateErr.msg)
+				else:
 					return redirect('../client/appointments')
 
 				
