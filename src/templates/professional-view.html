@@ -84,6 +84,7 @@
         <div class="container">
             <h1>{{ professional[9] }} - Reg. Nº {{ professional[2] }}</h1>
             <h2> {{ professional[1] }}</h2>
+            <h3 style="color: brown;"> {{msg}}</h3>
             <div style="background-color: rgb(95, 11, 230); border-radius: 10px;" class="container">
                 <br>
                 <h3>Horários Disponíveis</h3>
@@ -93,7 +94,7 @@
                         {% if appointment[2] == 'aberto' %}
                             <div class="col">
                                 <div class="form-container">
-                                    <form action="" method="post">
+                                    <form action="../professional-view/{{ professional[7] }}-{{ appointment[4] }}" method="post">
                                         <h4>Data/Horário</h4>
                                         {{ appointment[1]}}
                                         <h4>Observação</h4>
@@ -101,13 +102,15 @@
                                         <div class="form-group">
                                             <h4>Marcar horário</h4>
                                             <input type="checkbox" name="check" id="lcheck" value="y" >
+                                            <!-- <input type="number" name="appointID" id="appointID" value="{{appointment[4]}}" > -->
                                             <div class="help-block with-errors"></div>
                                         </div>
-                                        <a href="../professional-view/{{ professional[7] }}-{{ appointment[4] }}">
-                                            <i>
-                                                <button type="submit">AGENDAR</button>
-                                            </i>
-                                        </a>
+                                        
+                                        <!-- href="../professional-view/{{ professional[7] }}-{{ appointment[4] }}" -->
+                                             
+                                        <button class="form-control-submit-button" type="submit">AGENDAR</button>
+                                            
+                                        
                                     </form>
                                 </div>
                             </div> <!-- end of col -->    

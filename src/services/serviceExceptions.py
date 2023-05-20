@@ -41,3 +41,8 @@ class SemRetorno(TypeError):
     def __init__(self, obj, identificador, valor) -> None:
         self.msg=f"Não Existe nenhum {obj} com {identificador} igual a {valor}"
         super().__init__(self.msg)
+
+class ConflitoDeData(Exception):
+    def __init__(self, date, description) -> None:
+        self.msg=f"conflito de horario com outra consulta sua: {date} - {description}"
+        super().__init__(self.msg)
